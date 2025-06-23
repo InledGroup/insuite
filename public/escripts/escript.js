@@ -1,5 +1,4 @@
-
-
+// filepath: /Users/dev/Documents/insuite/public/escripts/escript.js
 // Añadir efecto de hover a las cards
 document.querySelectorAll('.app-card, .large-app-card').forEach(card => {
   card.addEventListener('mouseenter', function() {
@@ -137,3 +136,10 @@ document.querySelector('.install-button').addEventListener('click', function() {
             window.open(url, '_blank'); // Opens the URL in a new tab
         }
     }
+
+const menuToggle = document.getElementById('menu-toggle');
+if (menuToggle) {
+  menuToggle.addEventListener('click', () => {
+    document.querySelector('.mobile-menu')?.classList.toggle('active');
+  });
+}
