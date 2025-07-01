@@ -9,7 +9,9 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@shikijs/engine-javascript": "^3.7.0",
     "astro": "^5.10.0",
-    "gsap": "^3.13.0"
+    "gsap": "^3.13.0",
+    "shiki": "^3.7.0"
   }
 }

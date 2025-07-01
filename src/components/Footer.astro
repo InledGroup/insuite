@@ -1,0 +1,251 @@
+---
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <div class="brand-info">
+          <div class="brand-link">
+            <div class="logo">
+              <img src="https://insuite.inled.es/favicon.svg" width="48px" height="48px">
+            </div>
+            <span class="brand-text">InSuite</span>
+          </div>
+          <p class="brand-description">
+            Tu suite de ofimática libre
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <div class="link-group">
+          <h4 class="link-title">Editores</h4>
+          <ul class="link-list">
+            <li><a href="https://indoc.inled.es">InDoc</a></li>
+            <li><a href="https://inmd.inled.es">InMD</a></li>
+            <li><a href="https://inlinked.inled.es">InLinked</a></li>
+            <li><a href="https://mdpdf.inled.es">MDPDF</a></li>
+            <li><a href="https://inqr.inled.es">InQR</a></li>
+          </ul>
+        </div>
+
+        <!--<div class="link-group">
+          <h4 class="link-title">AI</h4>
+          <ul class="link-list">
+            <li><a href="#windows">Descubre Inled AI </a></li>
+          </ul>
+        </div> -->
+
+        <div class="link-group">
+          <h4 class="link-title">Soporte</h4>
+          <ul class="link-list">
+            <li><a href="help.inled.es">Centro de ayuda</a></li>
+            <li><a href="help.inled.es">Tutoriales</a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-content">
+        <div class="legal-links">
+          <a href="/privacy-policy">Política de Privacidad</a>
+          <a href="/terminos">Términos de Servicio</a>
+          <a href="/cookie-policy">Política de Cookies</a>
+        </div>
+        <div class="copyright">
+          <p>&copy; 2025 Inled Group por el diseño web.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--color-gray-900);
+    color: var(--color-gray-300);
+    padding: var(--spacing-16) 0 var(--spacing-8);
+  }
+
+  .footer-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: var(--spacing-16);
+    margin-bottom: var(--spacing-12);
+  }
+
+  .footer-brand {
+    max-width: 350px;
+  }
+
+  .brand-link {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    margin-bottom: var(--spacing-4);
+    text-decoration: none;
+  }
+
+  .brand-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-white);
+  }
+
+  .brand-description {
+    color: var(--color-gray-400);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-6);
+  }
+
+  .social-links {
+    display: flex;
+    gap: var(--spacing-4);
+  }
+
+  .social-links a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: var(--color-gray-800);
+    color: var(--color-gray-400);
+    border-radius: var(--border-radius-lg);
+    transition: all 0.2s ease;
+  }
+
+  .social-links a:hover {
+    background: var(--color-primary);
+    color: var(--color-white);
+    transform: translateY(-2px);
+  }
+
+  .footer-links {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-8);
+  }
+
+  .link-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-white);
+    margin-bottom: var(--spacing-4);
+  }
+
+  .link-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .link-list li {
+    margin-bottom: var(--spacing-3);
+  }
+
+  .link-list a {
+    color: var(--color-gray-400);
+    transition: color 0.2s ease;
+  }
+
+  .link-list a:hover {
+    color: var(--color-white);
+  }
+
+  .footer-bottom {
+    border-top: 1px solid var(--color-gray-800);
+    padding-top: var(--spacing-8);
+  }
+
+  .footer-bottom-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .legal-links {
+    display: flex;
+    gap: var(--spacing-6);
+  }
+
+  .legal-links a {
+    color: var(--color-gray-400);
+    font-size: 0.875rem;
+    transition: color 0.2s ease;
+  }
+
+  .legal-links a:hover {
+    color: var(--color-white);
+  }
+
+  .copyright {
+    font-size: 0.875rem;
+    color: var(--color-gray-500);
+  }
+
+  .language-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    background: var(--color-gray-800);
+    color: var(--color-gray-300);
+    padding: var(--spacing-2) var(--spacing-4);
+    border-radius: var(--border-radius);
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+  }
+
+  .language-btn:hover {
+    background: var(--color-gray-700);
+    color: var(--color-white);
+  }
+
+  @media (max-width: 768px) {
+    .footer {
+      padding: var(--spacing-12) 0 var(--spacing-6);
+    }
+
+    .footer-content {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-12);
+    }
+
+    .footer-links {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-6);
+    }
+
+    .footer-bottom-content {
+      flex-direction: column;
+      gap: var(--spacing-4);
+      text-align: center;
+    }
+
+    .legal-links {
+      order: 2;
+    }
+
+    .copyright {
+      order: 1;
+    }
+
+    .language-selector {
+      order: 3;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .footer-links {
+      grid-template-columns: 1fr;
+    }
+
+    .legal-links {
+      flex-direction: column;
+      gap: var(--spacing-3);
+    }
+  }
+</style>
