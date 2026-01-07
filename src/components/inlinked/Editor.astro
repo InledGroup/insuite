@@ -24,23 +24,23 @@ import {
     <div class="ribbon-group">
         <span class="group-label">Formato</span>
         <div class="group-content">
-            <button class="ql-bold ribbon-btn" title="Negrita">
+            <button class="format-btn ribbon-btn" data-format="bold" title="Negrita">
                 <div class="icon-box"><Bold class="icon" /></div>
                 <span class="label">Negrita</span>
             </button>
-            <button class="ql-italic ribbon-btn" title="Cursiva">
+            <button class="format-btn ribbon-btn" data-format="italic" title="Cursiva">
                 <div class="icon-box"><Italic class="icon" /></div>
                 <span class="label">Cursiva</span>
             </button>
-            <button class="ql-underline ribbon-btn" title="Subrayado">
+            <button class="format-btn ribbon-btn" data-format="underline" title="Subrayado">
                 <div class="icon-box"><Underline class="icon" /></div>
                 <span class="label">Subr.</span>
             </button>
-            <button class="ql-strike ribbon-btn" title="Tachado">
+            <button class="format-btn ribbon-btn" data-format="strike" title="Tachado">
                 <div class="icon-box"><Strikethrough class="icon" /></div>
                 <span class="label">Tachado</span>
             </button>
-            <button class="ql-code ribbon-btn" title="Código">
+            <button class="format-btn ribbon-btn" data-format="code" title="Código">
                 <div class="icon-box"><Code class="icon" /></div>
                 <span class="label">Código</span>
             </button>
@@ -76,7 +76,7 @@ import {
     <div class="ribbon-group">
         <span class="group-label">Acciones</span>
         <div class="group-content">
-            <button class="ql-clean ribbon-btn" title="Limpiar">
+            <button class="format-btn ribbon-btn" data-format="clean" title="Limpiar">
                 <div class="icon-box"><Eraser class="icon" /></div>
                 <span class="label">Limpiar</span>
             </button>
@@ -162,8 +162,9 @@ import {
       align-self: stretch;
   }
 
-  .ribbon-btn {
-      display: flex;
+  /* Increased specificity to override Quill defaults */
+  #toolbar .ribbon-btn {
+      display: flex !important;
       flex-direction: column;
       align-items: center;
       justify-content: center;
@@ -176,32 +177,37 @@ import {
       transition: all 0.2s;
       min-width: 60px;
       color: #475569;
+      
+      /* Reset Quill Overrides */
+      height: auto !important;
+      width: auto !important;
+      float: none !important;
   }
 
-  .ribbon-btn:hover {
+  #toolbar .ribbon-btn:hover {
       background: #e2e8f0;
       color: #0f172a;
   }
   
-  .ribbon-btn.ql-active, .ribbon-btn:active {
+  #toolbar .ribbon-btn.ql-active, #toolbar .ribbon-btn.active, #toolbar .ribbon-btn:active {
       background: #cbd5e1;
       color: #0f172a;
   }
 
-  .ribbon-btn.primary {
+  #toolbar .ribbon-btn.primary {
       color: #0f172a;
       background: #f1f5f9;
   }
-  .ribbon-btn.primary:hover {
+  #toolbar .ribbon-btn.primary:hover {
       background: #e2e8f0;
   }
   
-  .ribbon-btn.danger:hover {
+  #toolbar .ribbon-btn.danger:hover {
       background: #fee2e2;
       color: #ef4444;
   }
 
-  .icon-box {
+  #toolbar .icon-box {
       width: 32px;
       height: 32px;
       display: flex;
@@ -209,10 +215,11 @@ import {
       justify-content: center;
   }
   
-  .icon, .icon-box svg {
+  #toolbar .icon, #toolbar .icon-box svg {
       width: 24px;
       height: 24px;
       stroke-width: 2px;
+      float: none !important; /* Override Quill float */
   }
 
   .label {
@@ -263,7 +270,7 @@ import {
       .ribbon-toolbar {
           gap: 0.5rem;
       }
-      .ribbon-btn {
+      #toolbar .ribbon-btn {
           min-width: 44px;
           padding: 0.4rem;
       }
@@ -285,14 +292,9 @@ import {
   const copyIconBox = document.getElementById('copyIconBox');
   const clearBtn = document.getElementById('clearBtn');
   const customBtns = document.querySelectorAll('.custom-btn');
-  const cleanFormatBtn = document.querySelector('.ql-clean');
+  const formatBtns = document.querySelectorAll('.format-btn');
 
   // Initialize Quill
-  // We need to bind the toolbar manually because our structure is nested differently
-  // Quill expects a flat container for buttons usually, or we pass the ID.
-  // Passing '#toolbar' works, but Quill might try to add its own classes.
-  // We added 'ql-bold' etc to our buttons, so Quill module should pick them up if we pass container.
-  
   const quill = new Quill('#editor', {
     theme: 'snow',
     modules: {
@@ -311,7 +313,7 @@ import {
 
   quill.on('text-change', updateCharCount);
   
-  // Custom Format Handlers
+  // Custom Format Handlers (LinkedIn Styles)
   customBtns.forEach(btn => {
       btn.addEventListener('click', () => {
           const variant = (btn as HTMLElement).dataset.variant;
@@ -329,20 +331,52 @@ import {
       });
   });
 
-  // Intercept Clean Formatting
-  cleanFormatBtn?.addEventListener('click', () => {
-      setTimeout(() => {
-          const range = quill.getSelection();
-          if (range && range.length > 0) {
-              const text = quill.getText(range.index, range.length);
-              const normalized = unicodeToAscii(text);
-              if (text !== normalized) {
-                  quill.deleteText(range.index, range.length);
-                  quill.insertText(range.index, normalized);
-                  quill.setSelection(range.index, normalized.length);
-              }
+  // Standard Format Handlers & Clean
+  formatBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+          const format = (btn as HTMLElement).dataset.format;
+          if (!format) return;
+          
+          if (format === 'clean') {
+               // Custom Clean Logic
+               // Try to normalize Unicode first
+               const range = quill.getSelection();
+               if (range && range.length > 0) {
+                   const text = quill.getText(range.index, range.length);
+                   const normalized = unicodeToAscii(text);
+                   if (text !== normalized) {
+                       quill.deleteText(range.index, range.length);
+                       quill.insertText(range.index, normalized);
+                       quill.setSelection(range.index, normalized.length);
+                   }
+                   // Also remove standard formatting
+                   quill.removeFormat(range.index, range.length);
+               }
+          } else {
+             const currentFormats = quill.getFormat();
+             quill.format(format, !currentFormats[format]);
           }
-      }, 0);
+      });
+  });
+
+  // Update Active State on Selection Change
+  quill.on('editor-change', (eventName, ...args) => {
+      if (eventName === 'selection-change') {
+          const range = args[0];
+          if (range) {
+              const formats = quill.getFormat(range);
+              formatBtns.forEach(btn => {
+                  const format = (btn as HTMLElement).dataset.format;
+                  if (format && format !== 'clean') {
+                      if (formats[format]) {
+                          btn.classList.add('active');
+                      } else {
+                          btn.classList.remove('active');
+                      }
+                  }
+              });
+          }
+      }
   });
 
   // Copy Functionality
@@ -376,7 +410,7 @@ import {
   // Update Copy Button Success Style dynamically
   const style = document.createElement('style');
   style.textContent = `
-    .ribbon-btn.success {
+    #toolbar .ribbon-btn.success {
         color: #16a34a;
         background: #dcfce7;
     }
