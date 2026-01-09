@@ -3,7 +3,7 @@ import Sidebar from "../../components/sidebar.astro";
 import Layout from "../../layouts/LayoutEditors.astro";
 ---
 
-<Layout>
+<Layout i18nTitle="mdpdf.title">
     <html lang="es">
         <head>
             <meta charset="UTF-8" />
@@ -74,7 +74,7 @@ import Layout from "../../layouts/LayoutEditors.astro";
                         class="logo"
                     />
                     <div class="header-name">
-                        <h1>MDPDF</h1>
+                        <h1 data-i18n="mdpdf.header">MDPDF</h1>
                     </div>
                     <div class="header-info">
                         <a href="https://github.com/Inled-Group/mdpdf">GitHub</a
@@ -85,22 +85,22 @@ import Layout from "../../layouts/LayoutEditors.astro";
                 <div class="ribbon">
                     <div class="ribbon-group">
                         <button class="btn btn-primary" id="btn-export">
-                            <i class="fa-solid fa-file-pdf"></i>Exportar a PDF
+                            <i class="fa-solid fa-file-pdf"></i><span data-i18n="mdpdf.export">Exportar a PDF</span>
                         </button>
                         <button class="btn" id="btn-example">
-                            Insertar ejemplo
+                            <span data-i18n="mdpdf.example">Insertar ejemplo</span>
                         </button>
                     </div>
                     <div class="ribbon-group">
                         <button class="btn" id="btn-clear">
-                            <i class="fa-solid fa-trash"></i>Limpiar todo
+                            <i class="fa-solid fa-trash"></i><span data-i18n="mdpdf.clear_all">Limpiar todo</span>
                         </button>
                     </div>
                 </div>
 
                 <div class="main-content">
                     <div class="editor-panel">
-                        <div class="panel-header">Editor</div>
+                        <div class="panel-header" data-i18n="mdpdf.editor">Editor</div>
                         <textarea
                             id="markdown-input"
                             placeholder="# Mi Documento
@@ -130,26 +130,27 @@ function ejemplo() {
 |---------|----------|
 | $x^2$ | $2x$ |
 | $\sin x$ | $\cos x$ |"
+                            data-i18n-placeholder="mdpdf.placeholder"
                         ></textarea>
                     </div>
 
                     <div class="preview-panel">
-                        <div class="panel-header">Vista previa</div>
+                        <div class="panel-header" data-i18n="mdpdf.preview">Vista previa</div>
                         <div id="preview"></div>
                     </div>
                 </div>
 
                 <div class="status-bar">
-                    <a href="https://github.com/Inled-Group/mdpdf/issues"
+                    <a href="https://github.com/Inled-Group/mdpdf/issues" data-i18n="mdpdf.report"
                         >Reportar error</a
                     >
-                    <span id="word-count">0 palabras</span>
+                    <span id="word-count">0 <span data-i18n="mdoxc.words">palabras</span></span>
                 </div>
             </div>
 
             <div class="loading" id="loading">
                 <div class="spinner"></div>
-                <p>Generando PDF...</p>
+                <p data-i18n="mdpdf.generating">Generando PDF...</p>
             </div>
 
             <script></script>

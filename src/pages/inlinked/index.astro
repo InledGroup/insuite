@@ -8,6 +8,7 @@ import { ExternalLink } from 'lucide-astro';
 <Layout
   title="Inlinked | Formateador de texto para LinkedIN"
   description="Formatea texto para LinkedIN con IA"
+  i18nTitle="inlinked.title"
 >
   <div class="app-container">
     <Sidebar />
@@ -15,11 +16,11 @@ import { ExternalLink } from 'lucide-astro';
     <main class="main-content">
       <header class="top-bar">
          <div class="brand">
-             <h1>Inlinked</h1>
+             <h1 data-i18n="inlinked.header">Inlinked</h1>
          </div>
-         <a href="https://edge.inled.es" target="_blank" class="ai-link" title="Ir a Inled AI">
+         <a href="https://edge.inled.es" target="_blank" class="ai-link" title="Ir a Inled AI" data-i18n-tooltip="ai.link">
              <img src="https://hosted.inled.es/inledai.png" alt="Inled AI" />
-             <span class="ai-text">Inled AI</span>
+             <span class="ai-text" data-i18n="ai.title">Inled AI</span>
              <ExternalLink class="icon-sm" />
          </a>
       </header>
@@ -29,7 +30,7 @@ import { ExternalLink } from 'lucide-astro';
       </div>
 
       <footer class="footer">
-        <p>Inled Group 2026. Licenciado bajo GNU GPLv3.0</p>
+        <p data-i18n="footer.rights">Inled Group 2026. Licenciado bajo GNU GPLv3.0</p>
       </footer>
     </main>
   </div>

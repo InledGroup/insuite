@@ -3,7 +3,7 @@ import Sidebar from "../../components/sidebar.astro";
 import Layout from "../../layouts/LayoutEditors.astro";
 ---
 
-<Layout>
+<Layout i18nTitle="inmd.title">
     <html lang="es">
         <head>
             <meta charset="UTF-8" />
@@ -60,22 +60,22 @@ import Layout from "../../layouts/LayoutEditors.astro";
                         alt="Logotipo inMD"
                         class="logo"
                     />
-                    <h1>InMD</h1>
+                    <h1 data-i18n="inmd.header">InMD</h1>
                 </div>
 
                 <!-- Barra de herramientas -->
                 <div class="toolbar" id="toolbar">
                     <div class="toolbar-group">
-                        <button id="bold" title="Negrita (Ctrl+B)">
+                        <button id="bold" title="Negrita (Ctrl+B)" data-i18n-tooltip="inmd.bold">
                             <strong>B</strong>
                         </button>
-                        <button id="italic" title="Cursiva (Ctrl+I)">
+                        <button id="italic" title="Cursiva (Ctrl+I)" data-i18n-tooltip="inmd.italic">
                             <em>I</em>
                         </button>
-                        <button id="underline" title="Subrayado">
+                        <button id="underline" title="Subrayado" data-i18n-tooltip="inmd.underline">
                             <u>U</u>
                         </button>
-                        <button id="strikethrough" title="Tachado">
+                        <button id="strikethrough" title="Tachado" data-i18n-tooltip="inmd.strikethrough">
                             <s>S</s>
                         </button>
                     </div>
@@ -90,45 +90,45 @@ import Layout from "../../layouts/LayoutEditors.astro";
                     </div>
 
                     <div class="toolbar-group">
-                        <button id="ul" title="Lista sin orden"
+                        <button id="ul" title="Lista sin orden" data-i18n-tooltip="inmd.ul"
                             ><i class="fa-solid fa-list-ul"></i></button
                         >
-                        <button id="ol" title="Lista ordenada"
+                        <button id="ol" title="Lista ordenada" data-i18n-tooltip="inmd.ol"
                             ><i class="fa-solid fa-list-ol"></i></button
                         >
-                        <button id="checkbox" title="Lista de tareas"
+                        <button id="checkbox" title="Lista de tareas" data-i18n-tooltip="inmd.task"
                             ><i class="fa-solid fa-list-check"></i></button
                         >
                     </div>
 
                     <div class="toolbar-group">
-                        <button id="link" title="Enlace"
+                        <button id="link" title="Enlace" data-i18n-tooltip="inmd.link"
                             ><i class="fa-solid fa-link"></i></button
                         >
-                        <button id="image" title="Imagen"
+                        <button id="image" title="Imagen" data-i18n-tooltip="inmd.image"
                             ><i class="fa-solid fa-image"></i></button
                         >
-                        <button id="code" title="Código inline"
+                        <button id="code" title="Código inline" data-i18n-tooltip="inmd.code"
                             >&lt;/&gt;</button
                         >
-                        <button id="codeblock" title="Bloque de código"
+                        <button id="codeblock" title="Bloque de código" data-i18n-tooltip="inmd.codeblock"
                             >{}</button
                         >
                     </div>
 
                     <div class="toolbar-group">
-                        <button id="quote" title="Cita"
+                        <button id="quote" title="Cita" data-i18n-tooltip="inmd.quote"
                             ><i class="fa-solid fa-quote-right"></i></button
                         >
-                        <button id="table" title="Tabla"
+                        <button id="table" title="Tabla" data-i18n-tooltip="inmd.table"
                             ><i class="fa-solid fa-table"></i></button
                         >
-                        <button id="hr" title="Línea horizontal">―――</button>
+                        <button id="hr" title="Línea horizontal" data-i18n-tooltip="inmd.hr">―――</button>
                     </div>
 
                     <div class="toolbar-group">
-                        <button id="undo" title="Deshacer (Ctrl+Z)">↶</button>
-                        <button id="redo" title="Rehacer (Ctrl+Y)">↷</button>
+                        <button id="undo" title="Deshacer (Ctrl+Z)" data-i18n-tooltip="inmd.undo">↶</button>
+                        <button id="redo" title="Rehacer (Ctrl+Y)" data-i18n-tooltip="inmd.redo">↷</button>
                     </div>
 
                     <!--Aquí está la IA de Inled. A lo mejor debería hacer más grande el icono pero se me descoloca todo-->
@@ -137,13 +137,14 @@ import Layout from "../../layouts/LayoutEditors.astro";
                             class="toolbar-btn"
                             id="toggle-chat"
                             title="Hablar con la inteligencia artificial de Inled."
+                            data-i18n-tooltip="ai.chat"
                         >
                             <img
                                 src="/inmd/inledai.svg"
                                 alt="logo Inled AI"
                                 class="ailogo"
                             />
-                            <span>Chat IA</span>
+                            <span data-i18n="ai.chat">Chat IA</span>
                         </button>
                     </div>
                 </div>
@@ -152,23 +153,23 @@ import Layout from "../../layouts/LayoutEditors.astro";
                 <div class="editor-main">
                     <!-- Editor visual -->
                     <div class="editor-panel">
-                        <h3>Editor Visual</h3>
+                        <h3 data-i18n="inmd.visual">Editor Visual</h3>
                         <div id="visual-editor" contenteditable="true"></div>
                     </div>
 
                     <!-- Código Markdown -->
                     <div class="markdown-panel">
-                        <h3>Código Markdown</h3>
+                        <h3 data-i18n="inmd.markdown">Código Markdown</h3>
                         <textarea id="markdown-output" readonly></textarea>
                     </div>
                 </div>
 
                 <!-- Botones de acción -->
                 <div class="actions">
-                    <button id="copy-markdown">Copiar Markdown</button>
-                    <button id="copy-html">Copiar HTML</button>
-                    <button id="download-md">Descargar .md</button>
-                    <button id="load-file">Cargar archivo</button>
+                    <button id="copy-markdown" data-i18n="inmd.copy_md">Copiar Markdown</button>
+                    <button id="copy-html" data-i18n="inmd.copy_html">Copiar HTML</button>
+                    <button id="download-md" data-i18n="inmd.download_md">Descargar .md</button>
+                    <button id="load-file" data-i18n="inmd.load_file">Cargar archivo</button>
                     <input
                         type="file"
                         id="file-input"
@@ -186,7 +187,7 @@ import Layout from "../../layouts/LayoutEditors.astro";
                             src="/inmd/inledai.svg"
                             alt="logo Inled AI"
                             class="ailogo"
-                        /> Inled AI
+                        /> <span data-i18n="ai.title">Inled AI</span>
                     </h3>
                     <button class="chat-close" id="chat-close">
                         <i class="fas fa-times"></i>
@@ -194,7 +195,7 @@ import Layout from "../../layouts/LayoutEditors.astro";
                 </div>
                 <div class="chat-status" id="chat-status">
                     <div class="loading-spinner"></div>
-                    <span>Cargando modelo de IA...</span>
+                    <span data-i18n="ai.loading">Cargando modelo de IA...</span>
                 </div>
                 <div class="chat-messages" id="chat-messages"></div>
                 <div class="chat-input-container">
@@ -202,7 +203,9 @@ import Layout from "../../layouts/LayoutEditors.astro";
                         id="chat-input"
                         placeholder="Habla aquí con la IA..."
                         rows="3"
-                        disabled></textarea>
+                        disabled
+                        data-i18n="ai.placeholder"
+                        ></textarea>
                     <div class="chat-actions">
                         <button
                             id="send-message"
@@ -210,7 +213,7 @@ import Layout from "../../layouts/LayoutEditors.astro";
                             disabled
                         >
                             <i class="fas fa-paper-plane"></i>
-                            Enviar
+                            <span data-i18n="ai.send">Enviar</span>
                         </button>
                         <button
                             id="insert-response"
@@ -218,7 +221,7 @@ import Layout from "../../layouts/LayoutEditors.astro";
                             disabled
                         >
                             <i class="fas fa-plus"></i>
-                            Insertar
+                            <span data-i18n="ai.insert">Insertar</span>
                         </button>
                         <button
                             id="copy-response"
@@ -226,7 +229,7 @@ import Layout from "../../layouts/LayoutEditors.astro";
                             disabled
                         >
                             <i class="fas fa-copy"></i>
-                            Copiar
+                            <span data-i18n="ai.copy">Copiar</span>
                         </button>
                     </div>
                 </div>
@@ -241,6 +244,7 @@ import Layout from "../../layouts/LayoutEditors.astro";
                     href="https://ai.inled.es"
                     class="floating-card-text"
                     style="text-decoration: none;"
+                    data-i18n="ai.powered"
                     >Funciona gracias a Inled AI</a
                 >
             </div>

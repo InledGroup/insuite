@@ -22,27 +22,27 @@ import {
     
     <!-- Standard Formatting Group -->
     <div class="ribbon-group">
-        <span class="group-label">Formato</span>
+        <span class="group-label" data-i18n="inlinked.format_group">Formato</span>
         <div class="group-content">
-            <button class="format-btn ribbon-btn" data-format="bold" title="Negrita">
+            <button class="format-btn ribbon-btn" data-format="bold" title="Negrita" data-i18n-tooltip="inlinked.bold">
                 <div class="icon-box"><Bold class="icon" /></div>
-                <span class="label">Negrita</span>
+                <span class="label" data-i18n="inlinked.bold">Negrita</span>
             </button>
-            <button class="format-btn ribbon-btn" data-format="italic" title="Cursiva">
+            <button class="format-btn ribbon-btn" data-format="italic" title="Cursiva" data-i18n-tooltip="inlinked.italic">
                 <div class="icon-box"><Italic class="icon" /></div>
-                <span class="label">Cursiva</span>
+                <span class="label" data-i18n="inlinked.italic">Cursiva</span>
             </button>
-            <button class="format-btn ribbon-btn" data-format="underline" title="Subrayado">
+            <button class="format-btn ribbon-btn" data-format="underline" title="Subrayado" data-i18n-tooltip="inlinked.underline">
                 <div class="icon-box"><Underline class="icon" /></div>
-                <span class="label">Subr.</span>
+                <span class="label" data-i18n="inlinked.underline">Subr.</span>
             </button>
-            <button class="format-btn ribbon-btn" data-format="strike" title="Tachado">
+            <button class="format-btn ribbon-btn" data-format="strike" title="Tachado" data-i18n-tooltip="inlinked.strikethrough">
                 <div class="icon-box"><Strikethrough class="icon" /></div>
-                <span class="label">Tachado</span>
+                <span class="label" data-i18n="inlinked.strikethrough">Tachado</span>
             </button>
-            <button class="format-btn ribbon-btn" data-format="code" title="Código">
+            <button class="format-btn ribbon-btn" data-format="code" title="Código" data-i18n-tooltip="inlinked.code">
                 <div class="icon-box"><Code class="icon" /></div>
-                <span class="label">Código</span>
+                <span class="label" data-i18n="inlinked.code">Código</span>
             </button>
         </div>
     </div>
@@ -52,7 +52,7 @@ import {
 
     <!-- Custom Fonts Group -->
     <div class="ribbon-group">
-        <span class="group-label">Estilos LinkedIn</span>
+        <span class="group-label" data-i18n="inlinked.linkedin_group">Estilos LinkedIn</span>
         <div class="group-content">
             <button class="custom-btn ribbon-btn" data-variant="script" title="Script">
                 <div class="icon-box"><Feather class="icon" /></div>
@@ -74,28 +74,28 @@ import {
 
     <!-- Actions Group -->
     <div class="ribbon-group">
-        <span class="group-label">Acciones</span>
+        <span class="group-label" data-i18n="inlinked.actions_group">Acciones</span>
         <div class="group-content">
-            <button class="format-btn ribbon-btn" data-format="clean" title="Limpiar">
+            <button class="format-btn ribbon-btn" data-format="clean" title="Limpiar" data-i18n-tooltip="inlinked.clean">
                 <div class="icon-box"><Eraser class="icon" /></div>
-                <span class="label">Limpiar</span>
+                <span class="label" data-i18n="inlinked.clean">Limpiar</span>
             </button>
             
-            <button id="clearBtn" class="ribbon-btn danger" title="Borrar Todo">
+            <button id="clearBtn" class="ribbon-btn danger" title="Borrar Todo" data-i18n-tooltip="inlinked.clear">
                 <div class="icon-box"><Trash2 class="icon" /></div>
-                <span class="label">Borrar</span>
+                <span class="label" data-i18n="inlinked.clear">Borrar</span>
             </button>
             
-            <button id="copyBtn" class="ribbon-btn primary" title="Copiar a LinkedIn">
+            <button id="copyBtn" class="ribbon-btn primary" title="Copiar a LinkedIn" data-i18n-tooltip="inlinked.copy">
                 <div class="icon-box" id="copyIconBox"><Copy class="icon" /></div>
-                <span class="label" id="copyLabel">Copiar</span>
+                <span class="label" id="copyLabel" data-i18n="inlinked.copy">Copiar</span>
             </button>
         </div>
     </div>
   </div>
 
   <div class="editor-content-area">
-      <div id="editor"></div>
+      <div id="editor" data-i18n-placeholder="inlinked.placeholder"></div>
   </div>
   
   <div class="status-bar">
@@ -293,6 +293,14 @@ import {
   const clearBtn = document.getElementById('clearBtn');
   const customBtns = document.querySelectorAll('.custom-btn');
   const formatBtns = document.querySelectorAll('.format-btn');
+  
+  // Wait for localization
+  const getT = (key, defaultText) => {
+      if (window.Localization) {
+          return window.Localization.t(key);
+      }
+      return defaultText;
+  };
 
   // Initialize Quill
   const quill = new Quill('#editor', {
@@ -300,8 +308,19 @@ import {
     modules: {
         toolbar: '#toolbar'
     },
-    placeholder: 'Escribe aquí tu post para LinkedIn...'
+    placeholder: 'Escribe aquí tu post para LinkedIn...' // Default, will be updated by localization
   });
+  
+  // Apply placeholder from localization if available or listener
+  window.addEventListener('languageChanged', () => {
+       const ph = window.Localization.t('inlinked.placeholder');
+       quill.root.dataset.placeholder = ph;
+  });
+  // Initial check
+  if (window.Localization) {
+       quill.root.dataset.placeholder = window.Localization.t('inlinked.placeholder');
+  }
+
 
   function updateCharCount() {
     const text = quill.getText();
@@ -388,21 +407,21 @@ import {
         await navigator.clipboard.writeText(unicodeText);
         
         // Visual Feedback
-        if (copyLabel) copyLabel.textContent = 'Copiado';
+        if (copyLabel) copyLabel.textContent = getT('inlinked.copied', 'Copiado');
         if (copyBtn) copyBtn.classList.add('success');
         
         setTimeout(() => {
-            if (copyLabel) copyLabel.textContent = 'Copiar';
+            if (copyLabel) copyLabel.textContent = getT('inlinked.copy', 'Copiar');
             if (copyBtn) copyBtn.classList.remove('success');
         }, 2000);
       } catch (err) {
         console.error('Failed to copy', err);
-        alert('No se pudo copiar el texto.');
+        alert(getT('inlinked.error_copy', 'No se pudo copiar el texto.'));
       }
   });
 
   clearBtn?.addEventListener('click', () => {
-      if (confirm('¿Borrar todo el texto?')) {
+      if (confirm(getT('inlinked.confirm_clear', '¿Borrar todo el texto?'))) {
           quill.setText('');
       }
   });

@@ -4,9 +4,10 @@ import Sub from '../components/Sub.astro';
 interface Props {
   title?: string;
   description?: string;
+  i18nTitle?: string;
 }
 
-const { title = "Insuite Editors", description = "Herramientas de edición" } = Astro.props;
+const { title = "Insuite Editors", description = "Herramientas de edición", i18nTitle } = Astro.props;
 ---
 
 <!doctype html>
@@ -36,11 +37,13 @@ const { title = "Insuite Editors", description = "Herramientas de edición" } = 
         />
         <link rel="sitemap" href="/sitemap.xml" />
 
+        <script is:inline src="/js/localization.js"></script>
+
         <slot name="head" />
 
         
     </head>
-    <body>
+    <body data-i18n-title={i18nTitle}>
         <slot />
         <Sub />
         <script>

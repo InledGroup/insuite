@@ -7,11 +7,23 @@ class QuillScribeAI {
         
         this.init();
     }
+    
+    // Helper
+    t(key, defaultText) {
+        if (window.Localization) return window.Localization.t(key);
+        return defaultText || key;
+    }
 
     async init() {
         this.initializeQuill();
         this.setupEventListeners();
         await this.initializeWebLLM();
+        
+        // Listener for language change to update placeholder if needed
+        window.addEventListener('languageChanged', () => {
+             const ph = this.t('indoc.placeholder');
+             this.quill.root.dataset.placeholder = ph;
+        });
     }
 
     initializeQuill() {
@@ -36,7 +48,7 @@ class QuillScribeAI {
                     container: toolbarOptions
                 }
             },
-            placeholder: 'Comienza a escribir aquí con la ayuda de la IA. :)'
+            placeholder: this.t('indoc.placeholder', 'Comienza a escribir aquí con la ayuda de la IA. :)')
         });
 
         // Mover la toolbar al contenedor personalizado
@@ -105,23 +117,23 @@ class QuillScribeAI {
             // Configurar el modelo (usando un modelo más pequeño para mejor rendimiento)
             const selectedModel = "Llama-3.2-1B-Instruct-q4f32_1-MLC";
             
-            this.updateChatStatus('Descargando modelo de IA...', true);
+            this.updateChatStatus(this.t('indoc.ai_downloading', 'Descargando modelo de IA...'), true);
             
             // Crear el engine con callbacks de progreso
             this.chatEngine = await CreateMLCEngine(selectedModel, {
                 initProgressCallback: (progress) => {
                     const percentage = Math.round(progress.progress * 100);
-                    this.updateChatStatus(`Descargando modelo de IA: ${percentage}%`, true);
+                    this.updateChatStatus(`${this.t('indoc.ai_downloading', 'Descargando modelo de IA')}: ${percentage}%`, true);
                 }
             });
 
             console.log('WebLLM inicializado correctamente');
-            this.updateChatStatus('¡IA lista para usar!', false);
+            this.updateChatStatus(this.t('indoc.ai_ready', '¡IA lista para usar!'), false);
             this.enableChatControls();
             
         } catch (error) {
             console.error('Error inicializando WebLLM:', error);
-            this.updateChatStatus('Error al cargar la IA. Inténtalo más tarde.', false);
+            this.updateChatStatus(this.t('indoc.ai_error_load', 'Error al cargar la IA. Inténtalo más tarde.'), false);
         }
     }
 
@@ -133,7 +145,7 @@ class QuillScribeAI {
         text.textContent = message;
         spinner.style.display = showSpinner ? 'block' : 'none';
         
-        if (!showSpinner && message.includes('lista')) {
+        if (!showSpinner && (message.includes('lista') || message.includes('ready'))) {
             setTimeout(() => {
                 statusEl.classList.add('hidden');
             }, 2000);
@@ -146,14 +158,14 @@ class QuillScribeAI {
     }
 
     newDocument() {
-        if (confirm('Revisa antes si has guardado los cambios por que al abrir un nuevo documento se perderán.')) {
+        if (confirm(this.t('indoc.confirm_new', 'Revisa antes si has guardado los cambios por que al abrir un nuevo documento se perderán.'))) {
             this.quill.setContents([]);
             this.quill.focus();
         }
     }
 
     saveToLocalStorage() {
-        const title = prompt('Nombre del documento:', `Documento ${new Date().toLocaleString()}`);
+        const title = prompt(this.t('indoc.prompt_name', 'Nombre del documento:'), `Documento ${new Date().toLocaleString()}`);
         if (!title) return;
 
         const content = this.quill.getContents();
@@ -175,14 +187,14 @@ class QuillScribeAI {
         // Guardar en localStorage
         localStorage.setItem('quill-documents', JSON.stringify(savedDocs));
         
-        alert(`Documento "${title}" guardado correctamente`);
+        alert(`${this.t('indoc.doc_saved', 'Documento guardado correctamente')}: "${title}"`);
     }
 
     showOpenDialog() {
         const savedDocs = JSON.parse(localStorage.getItem('quill-documents') || '[]');
         
         if (savedDocs.length === 0) {
-            alert('No hay documentos guardados');
+            alert(this.t('indoc.no_docs', 'No hay documentos guardados'));
             return;
         }
 
@@ -212,7 +224,7 @@ class QuillScribeAI {
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         `;
 
-        let html = '<h3 style="margin-bottom: 20px;">Documentos Guardados</h3>';
+        let html = `<h3 style="margin-bottom: 20px;">${this.t('indoc.docs_title', 'Documentos Guardados')}</h3>`;
         
         savedDocs.reverse().forEach(doc => {
             const date = new Date(doc.created).toLocaleString();
@@ -222,16 +234,16 @@ class QuillScribeAI {
                      onmouseout="this.style.background='white'"
                      onclick="window.quillApp.openDocument('${doc.id}')">
                     <strong>${doc.title}</strong><br>
-                    <small style="color: #666;">Creado: ${date}</small>
+                    <small style="color: #666;">${this.t('indoc.created', 'Creado:')} ${date}</small>
                     <button onclick="event.stopPropagation(); window.quillApp.deleteDocument('${doc.id}')" 
                             style="float: right; background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;">
-                        Eliminar
+                        ${this.t('indoc.delete', 'Eliminar')}
                     </button>
                 </div>
             `;
         });
         
-        html += '<button onclick="this.closest(\'.modal\').remove()" style="margin-top: 20px; padding: 8px 16px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">Cerrar</button>';
+        html += `<button onclick="this.closest('.modal').remove()" style="margin-top: 20px; padding: 8px 16px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">${this.t('indoc.close', 'Cerrar')}</button>`;
         
         content.innerHTML = html;
         modal.className = 'modal';
@@ -253,12 +265,12 @@ class QuillScribeAI {
         if (doc) {
             this.quill.setContents(doc.delta);
             document.querySelector('.modal')?.remove();
-            alert(`Documento "${doc.title}" abierto`);
+            alert(`${this.t('indoc.doc_opened', 'Documento abierto')}: "${doc.title}"`);
         }
     }
 
     deleteDocument(docId) {
-        if (confirm('¿Estás seguro de que quieres eliminar este documento?')) {
+        if (confirm(this.t('indoc.confirm_delete', '¿Estás seguro de que quieres eliminar este documento?'))) {
             const savedDocs = JSON.parse(localStorage.getItem('quill-documents') || '[]');
             const filteredDocs = savedDocs.filter(d => d.id !== docId);
             localStorage.setItem('quill-documents', JSON.stringify(filteredDocs));
@@ -277,7 +289,7 @@ class QuillScribeAI {
     async exportToPDF() {
         try {
             if (typeof html2pdf === 'undefined') {
-                alert('Error: html2pdf no está cargado. Contacte con el administrador.');
+                alert(this.t('indoc.error_html2pdf', 'Error: html2pdf no está cargado.'));
                 return;
             }
             const content = document.querySelector('.ql-editor').innerHTML;
@@ -292,16 +304,16 @@ class QuillScribeAI {
 
             html2pdf().set(opt).from(content).save();
             if (typeof showToast === 'function') {
-                showToast('PDF exportado exitosamente', 'success');
+                showToast(this.t('indoc.pdf_success', 'PDF exportado exitosamente'), 'success');
             } else {
-                alert('PDF exportado exitosamente');
+                alert(this.t('indoc.pdf_success', 'PDF exportado exitosamente'));
             }
         } catch (error) {
             console.error('Error exportando a PDF:', error);
             if (typeof showToast === 'function') {
-                showToast('Error al exportar a PDF: ' + error.message, 'error');
+                showToast(this.t('indoc.pdf_error', 'Error al exportar a PDF: ') + error.message, 'error');
             } else {
-                alert('Error al exportar a PDF: ' + error.message);
+                alert(this.t('indoc.pdf_error', 'Error al exportar a PDF: ') + error.message);
             }
         }
     }
@@ -359,7 +371,7 @@ class QuillScribeAI {
                 messages: [
                     {
                         role: "system",
-                        content: "Eres un asistente de escritura útil y amigable. Ayudas a los usuarios con sus documentos, proporcionas sugerencias de escritura, corriges gramática y respondes preguntas de manera clara y concisa. Responde siempre en español. Puedes usar Markdown para formatear tu respuesta (negrita **texto**, cursiva *texto*, listas, etc.). El usuario está trabajando en el siguiente texto:\n\n" + editorText
+                        content: this.t('indoc.ai_system_prompt', "Eres un asistente...") + editorText
                     },
                     {
                         role: "user",
@@ -384,7 +396,7 @@ class QuillScribeAI {
         } catch (error) {
             console.error('Error en chat:', error);
             thinkingEl.remove();
-            this.addMessage('Lo siento, hubo un error al procesar tu mensaje. Inténtalo de nuevo.', 'assistant');
+            this.addMessage(this.t('ai.error', 'Lo siento, hubo un error al procesar tu mensaje. Inténtalo de nuevo.'), 'assistant');
         }
         
         this.isLoading = false;
@@ -425,7 +437,7 @@ class QuillScribeAI {
         const thinkingEl = document.createElement('div');
         thinkingEl.className = 'chat-thinking';
         thinkingEl.innerHTML = `
-            <span>Pensando</span>
+            <span>${this.t('ai.thinking', 'Pensando')}</span>
             <div class="thinking-dots">
                 <div class="thinking-dot"></div>
                 <div class="thinking-dot"></div>
@@ -587,7 +599,7 @@ class QuillScribeAI {
                 // Feedback visual
                 const btn = document.getElementById('copy-response');
                 const originalText = btn.innerHTML;
-                btn.innerHTML = '<i class="fas fa-check"></i> Copiado';
+                btn.innerHTML = '<i class="fas fa-check"></i> ' + this.t('ai.copied', 'Copiado');
                 btn.style.background = '#28a745';
                 btn.style.color = 'white';
                 
@@ -599,7 +611,7 @@ class QuillScribeAI {
                 
             } catch (error) {
                 console.error('Error copiando:', error);
-                alert('Error al copiar el texto');
+                alert(this.t('indoc.copy_error', 'Error al copiar el texto'));
             }
         }
     }

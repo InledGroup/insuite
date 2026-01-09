@@ -4,17 +4,24 @@ const currentPath = Astro.url.pathname;
 
 // Define your sidebar items with their paths
 const sidebarItems = [
-  { path: '/', icon: 'home' },
-  { path: '/apps', icon: 'apps' },
+  { path: '/', icon: 'home', label: 'sidebar.home' },
+  { path: '/apps', icon: 'apps', label: 'sidebar.apps' },
 ];
 ---
 
 <div class="sidebar">
   {sidebarItems.map((item) => (
-    <a href={item.path} class={`sidebar-item ${currentPath === item.path ? 'active' : ''}`} style="text-decoration: none; color: white;">
+    <a href={item.path} class={`sidebar-item ${currentPath === item.path ? 'active' : ''}`} style="text-decoration: none; color: white;" title={item.label} data-i18n-tooltip={item.label}>
 <span class="material-symbols-rounded">
 {item.icon}
 </span>
     </a>
   ))}
+
+  <div class="sidebar-bottom">
+      <div class="lang-switch">
+          <input type="checkbox" id="lang-switch-input" style="display:none">
+          <label for="lang-switch-input" id="lang-switch-label" style="cursor:pointer; width:100%; height:100%; display:flex; align-items:center; justify-content:center;">ES</label>
+      </div>
+  </div>
  </div>

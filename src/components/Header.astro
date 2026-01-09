@@ -1,5 +1,4 @@
 ---
-import LanguageSelector from './LanguageSelector.astro';
 ---
 
 <header class="header">
@@ -16,14 +15,19 @@ import LanguageSelector from './LanguageSelector.astro';
         </div>
 
         <ul class="nav-menu">
-          <li><a href="#características" class="nav-link">Características</a></li>
-          <li><a href="#editores" class="nav-link">Editores</a></li>
+          <li><a href="#características" class="nav-link" data-i18n="landing.header.features">Características</a></li>
+          <li><a href="#editores" class="nav-link" data-i18n="landing.header.editors">Editores</a></li>
         </ul>
 
         <div class="nav-actions">
-          <a href="https://help.inled.es" class="nav-link">Documentación</a>
-          <LanguageSelector />
-          <a href="/apps" class="btn btn-primary">Acceder gratis</a>
+          <a href="https://help.inled.es" class="nav-link" data-i18n="landing.header.docs">Documentación</a>
+          
+          <div class="lang-switch-header">
+              <input type="checkbox" id="lang-switch-input" style="display:none">
+              <label for="lang-switch-input" id="lang-switch-label" class="lang-label">ES</label>
+          </div>
+
+          <a href="/apps" class="btn btn-primary" data-i18n="landing.header.access">Acceder gratis</a>
         </div>
 
         <button class="mobile-menu-btn" aria-label="Toggle mobile menu">
@@ -36,3 +40,29 @@ import LanguageSelector from './LanguageSelector.astro';
   </nav>
 </header>
 
+<style>
+.lang-switch-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lang-label {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--color-gray-300);
+    padding: 0.5rem;
+    border: 1px solid var(--color-gray-700);
+    border-radius: 6px;
+    transition: all 0.2s;
+    width: 40px;
+    text-align: center;
+    display: block;
+}
+
+.lang-label:hover {
+    background: var(--color-gray-800);
+    color: white;
+}
+</style>

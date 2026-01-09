@@ -29,25 +29,31 @@
       let currentCodeUrl = '';
       let currentType = 'text';
 
-      // Tips for each type
+      // Tips for each type (Using keys)
       const tips = {
         text: [
-          '• Puedes usar URLs, texto, números de teléfono',
-          '• El código QR se puede descargar como imagen PNG',
-          '• Puedes generarlo también pulsando Enter'
+          'inqr.tips_text_1',
+          'inqr.tips_text_2',
+          'inqr.tips_text_3'
         ],
         wifi: [
-          '• Los dispositivos podrán conectarse automáticamente',
-          '• Asegúrate de que los datos sean correctos',
-          '• Funciona con la mayoría de smartphones modernos',
-          '• Puedes generarlo también pulsando Enter'
+          'inqr.tips_wifi_1',
+          'inqr.tips_wifi_2',
+          'inqr.tips_wifi_3',
+          'inqr.tips_wifi_4'
         ],
         barcode: [
-          '• Útil para inventarios y productos',
-          '• CODE 128 es el más versátil',
-          '• Pronto añadiremos más tipos de códigos de barras.',
-          '• Puedes generarlo también pulsando Enter'
+          'inqr.tips_barcode_1',
+          'inqr.tips_barcode_2',
+          'inqr.tips_barcode_3',
+          'inqr.tips_barcode_4'
         ]
+      };
+
+      // Helper for translation
+      const t = (key, defaultText) => {
+          if (window.Localization) return window.Localization.t(key);
+          return defaultText || key;
       };
 
       // Show toast
@@ -63,8 +69,30 @@
 
       // Update tips
       function updateTips(type) {
-        tipsList.innerHTML = tips[type].map(tip => `<li>${tip}</li>`).join('');
+        tipsList.innerHTML = tips[type].map(key => `<li>${t(key)}</li>`).join('');
       }
+      
+      // Update UI texts (Title, etc)
+      function updateUITexts() {
+          if (currentType === 'text') {
+            resultTitle.textContent = t('inqr.title_text', 'Tu Código QR');
+          } else if (currentType === 'wifi') {
+            resultTitle.textContent = t('inqr.title_wifi', 'Tu Código QR WiFi');
+          } else if (currentType === 'barcode') {
+            resultTitle.textContent = t('inqr.title_barcode', 'Tu Código de Barras');
+          }
+          
+          if (!codeResult.classList.contains('hidden')) {
+               downloadText.textContent = currentType === 'barcode' ? t('inqr.download_barcode') : t('inqr.download_qr');
+          }
+          
+          updateTips(currentType);
+      }
+      
+      // Listen for language changes
+      window.addEventListener('languageChanged', () => {
+          updateUITexts();
+      });
 
       // Handle type tab clicks
       typeTabs.forEach(tab => {
@@ -85,16 +113,15 @@
           
           if (type === 'text') {
             textForm.classList.add('active');
-            resultTitle.textContent = 'Tu Código QR';
           } else if (type === 'wifi') {
             copyIcon.classList.add('hidden');
             wifiForm.classList.add('active');
-            resultTitle.textContent = 'Tu Código QR WiFi';
           } else if (type === 'barcode') {
             copyIcon.classList.add('hidden');
             barcodeForm.classList.add('active');
-            resultTitle.textContent = 'Tu Código de Barras';
           }
+          
+          updateUITexts(); // Update titles and tips
           
           // Mostrar u ocultar textInput según el tipo
           if (type === 'text') {
@@ -103,7 +130,6 @@
             textInput.classList.add('hidden');
           }
 
-          updateTips(type);
           updateGenerateButton();
         });
       });
@@ -120,9 +146,9 @@
             checkIcon.classList.add('hidden');
           }, 2000);
           
-          showToast('Texto copiado al portapapeles');
+          showToast(t('inqr.toast_copied', 'Texto copiado al portapapeles'));
         } catch (error) {
-          showToast('No se pudo copiar el texto', 'error');
+          showToast(t('inqr.toast_error_copy', 'No se pudo copiar el texto'), 'error');
         }
       }
 
@@ -134,7 +160,7 @@
         if (currentType === 'text') {
           data = textInput.value.trim();
           if (!data) {
-            showToast('Por favor ingresa un texto para generar el código QR', 'error');
+            showToast(t('inqr.toast_empty_text', 'Por favor ingresa un texto para generar el código QR'), 'error');
             return;
           }
         } else if (currentType === 'wifi') {
@@ -144,7 +170,7 @@
           const hidden = wifiHidden.checked;
           
           if (!ssid) {
-            showToast('Por favor ingresa el nombre de la red WiFi', 'error');
+            showToast(t('inqr.toast_empty_ssid', 'Por favor ingresa el nombre de la red WiFi'), 'error');
             return;
           }
           
@@ -155,7 +181,7 @@
           const type = barcodeType.value;
           
           if (!text) {
-            showToast('Por favor ingresa el texto para el código de barras', 'error');
+            showToast(t('inqr.toast_empty_barcode', 'Por favor ingresa el texto para el código de barras'), 'error');
             return;
           }
           
@@ -167,7 +193,7 @@
         generateBtn.disabled = true;
         generateText.innerHTML = `
           <div class="spinner"></div>
-          <span>Generando...</span>
+          <span>${t('inqr.generating', 'Generando...')}</span>
         `;
 
         try {
@@ -194,9 +220,9 @@
             placeholder.classList.add('hidden');
             codeResult.classList.remove('hidden');
             
-            downloadText.textContent = isBarcode ? 'Descargar Código de Barras' : 'Descargar Código QR';
+            downloadText.textContent = isBarcode ? t('inqr.download_barcode', 'Descargar Código de Barras') : t('inqr.download_qr', 'Descargar Código QR');
             
-            showToast(isBarcode ? '¡Código de barras generado correctamente!' : '¡Código QR generado correctamente!');
+            showToast(isBarcode ? t('inqr.toast_success_barcode', '¡Código de barras generado correctamente!') : t('inqr.toast_success_qr', '¡Código QR generado correctamente!'));
           };
           
           img.onerror = function() {
@@ -206,12 +232,12 @@
           img.src = codeUrl;
           
         } catch (error) {
-          showToast('Error al descargar. Haz clic derecho en el código y pulsa en Guardar imagen como...', 'error');
+          showToast(t('inqr.toast_error_download', 'Error al descargar...'), 'error');
         } finally {
           // Reset button state
           generateBtn.disabled = false;
           generateText.innerHTML = `
-            <span>Generar Código</span>
+            <span data-i18n="inqr.generate">${t('inqr.generate', 'Generar Código')}</span>
           `;
         }
       }
@@ -234,9 +260,9 @@
           document.body.removeChild(link);
           
           window.URL.revokeObjectURL(url);
-          showToast('El código se ha descargado correctamente');
+          showToast(t('inqr.toast_success_download', 'El código se ha descargado correctamente'));
         } catch (error) {
-          showToast('Vaya, ha fallado la descarga. Haz clic derecho en el código y pulsa en Guardar imagen como...', 'error');
+          showToast(t('inqr.toast_error_download', 'Vaya, ha fallado la descarga...'), 'error');
         }
       }
 
@@ -275,5 +301,12 @@
       });
 
       // Initial state
-      updateTips('text');
+      // We wait for window load or just init
+      // Since localization might load after
+      if (window.Localization) {
+          updateUITexts();
+      } else {
+          // Default
+          updateTips('text');
+      }
       updateGenerateButton();

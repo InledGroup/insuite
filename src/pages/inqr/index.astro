@@ -3,14 +3,14 @@ import Sidebar from "../../components/sidebar.astro";
 import Layout from "../../layouts/LayoutEditors.astro";
 ---
 
-<Layout>
-  <html lang="es">
-    <head>
-      <meta charset="UTF-8" />
-      <link rel="shortcut icon" type="image/x-icon" href="/inqr/favicon.ico" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>InQR | Genera QR gratis y privado</title>
-      <meta
+<Layout i18nTitle="inqr.title">
+    <html lang="es">
+        <head>
+            <meta charset="UTF-8" />
+            <link rel="shortcut icon" type="image/x-icon" href="/inqr/favicon.ico" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>InQR | Genera QR gratis y privado</title>
+            <meta
         name="description"
         content="Generador de códigos QR y códigos de barras moderno y fácil de usar"
       />
@@ -38,26 +38,26 @@ import Layout from "../../layouts/LayoutEditors.astro";
           <img src="/inqr/inqr.png" class="qr-icon" alt="INQR logo" />
 
           <h1 class="main-title">InQR</h1>
-          <p class="subtitle">Genera códigos QR</p>
+          <p class="subtitle" data-i18n="inqr.subtitle">Genera códigos QR</p>
         </div>
 
         <div class="grid">
           <!-- Input Section -->
           <div class="card">
-            <h2 class="card-title">Crear código</h2>
+            <h2 class="card-title" data-i18n="inqr.create">Crear código</h2>
 
             <!-- Type Selector -->
             <div class="type-selector">
               <div class="type-tabs">
                 <div class="type-tab active" data-type="text">
-                  <div><i class="fa-solid fa-link"></i> <br />Texto/URL</div>
+                  <div><i class="fa-solid fa-link"></i> <br /> <span data-i18n="inqr.tab_text">Texto/URL</span></div>
                 </div>
                 <div class="type-tab" data-type="wifi">
-                  <div><i class="fa-solid fa-wifi"></i><br /> Acceso WiFi</div>
+                  <div><i class="fa-solid fa-wifi"></i><br /> <span data-i18n="inqr.tab_wifi">Acceso WiFi</span></div>
                 </div>
                 <div class="type-tab" data-type="barcode">
                   <div>
-                    <i class="fa-solid fa-barcode"></i><br />Código de Barras
+                    <i class="fa-solid fa-barcode"></i><br /><span data-i18n="inqr.tab_barcode">Código de Barras</span>
                   </div>
                 </div>
               </div>
@@ -71,6 +71,7 @@ import Layout from "../../layouts/LayoutEditors.astro";
                   class="text-input"
                   id="textInput"
                   placeholder="Escribe aquí tu texto, URL, número de teléfono... "
+                  data-i18n-placeholder="inqr.input_text"
                 />
                 <button class="copy-btn" id="copyBtn">
                   <svg class="copy-icon" id="copyIcon" viewBox="0 0 24 24">
@@ -93,7 +94,7 @@ import Layout from "../../layouts/LayoutEditors.astro";
             <!-- WiFi Form -->
             <div class="wifi-form" id="wifiForm">
               <div class="form-group">
-                <label for="wifiSSID">Nombre de la red (SSID):</label>
+                <label for="wifiSSID" data-i18n="inqr.wifi_ssid">Nombre de la red (SSID):</label>
                 <input
                   type="text"
                   class="text-input"
@@ -102,7 +103,7 @@ import Layout from "../../layouts/LayoutEditors.astro";
                 />
               </div>
               <div class="form-group">
-                <label for="wifiPassword">Contraseña:</label>
+                <label for="wifiPassword" data-i18n="inqr.wifi_pass">Contraseña:</label>
                 <input
                   type="password"
                   class="text-input"
@@ -111,7 +112,7 @@ import Layout from "../../layouts/LayoutEditors.astro";
                 />
               </div>
               <div class="form-group">
-                <label for="wifiSecurity">Tipo de seguridad:</label>
+                <label for="wifiSecurity" data-i18n="inqr.wifi_security">Tipo de seguridad:</label>
                 <select class="select-input" id="wifiSecurity">
                   <option value="WPA">WPA/WPA2</option>
                   <option value="WEP">WEP</option>
@@ -120,7 +121,7 @@ import Layout from "../../layouts/LayoutEditors.astro";
               </div>
               <div class="form-group">
                 <label>
-                  <input type="checkbox" id="wifiHidden" /> Red oculta
+                  <input type="checkbox" id="wifiHidden" /> <span data-i18n="inqr.wifi_hidden">Red oculta</span>
                 </label>
               </div>
             </div>
@@ -128,7 +129,7 @@ import Layout from "../../layouts/LayoutEditors.astro";
             <!-- Barcode Form -->
             <div class="barcode-form" id="barcodeForm">
               <div class="form-group">
-                <label for="barcodeText">Contenido del código de barras:</label>
+                <label for="barcodeText" data-i18n="inqr.barcode_content">Contenido del código de barras:</label>
                 <input
                   type="text"
                   class="text-input"
@@ -137,7 +138,7 @@ import Layout from "../../layouts/LayoutEditors.astro";
                 />
               </div>
               <div class="form-group">
-                <label for="barcodeType">Tipo de código de barras:</label>
+                <label for="barcodeType" data-i18n="inqr.barcode_type">Tipo de código de barras:</label>
                 <select class="select-input" id="barcodeType">
                   <option value="code128">CODE 128</option>
                   <!--<option value="ean13">EAN-13</option>
@@ -149,22 +150,22 @@ import Layout from "../../layouts/LayoutEditors.astro";
 
             <button class="generate-btn" id="generateBtn">
               <i class="fa-solid fa-qrcode"></i>
-              <span id="generateText">Generar Código</span>
+              <span id="generateText" data-i18n="inqr.generate">Generar Código</span>
             </button>
 
             <!-- Tips -->
             <div class="tips">
-              <h3><i class="fa-regular fa-lightbulb"></i> Consejos:</h3>
+              <h3><i class="fa-regular fa-lightbulb"></i> <span data-i18n="inqr.tips_title">Consejos:</span></h3>
               <ul id="tipsList">
-                <li>• Puedes usar URLs, texto, números de teléfono</li>
-                <li>• El código se puede descargar como imagen PNG</li>
+                <li data-i18n="inqr.tip1">• Puedes usar URLs, texto, números de teléfono</li>
+                <li data-i18n="inqr.tip2">• El código se puede descargar como imagen PNG</li>
               </ul>
             </div>
           </div>
 
           <!-- QR Display Section -->
           <div class="card">
-            <h2 class="card-title" id="resultTitle">Tu Código</h2>
+            <h2 class="card-title" id="resultTitle" data-i18n="inqr.your_code">Tu Código</h2>
 
             <div class="qr-display">
               <!-- Placeholder -->
@@ -176,8 +177,8 @@ import Layout from "../../layouts/LayoutEditors.astro";
                     ></path>
                   </svg>
                 </div>
-                <h3>No hay código aún</h3>
-                <p>Selecciona un tipo y genera tu código</p>
+                <h3 data-i18n="inqr.no_code_title">No hay código aún</h3>
+                <p data-i18n="inqr.no_code_desc">Selecciona un tipo y genera tu código</p>
               </div>
 
               <!-- Result -->
@@ -190,11 +191,11 @@ import Layout from "../../layouts/LayoutEditors.astro";
                   <svg class="download-icon" viewBox="0 0 24 24">
                     <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path>
                   </svg>
-                  <span id="downloadText">Descargar Código</span>
+                  <span id="downloadText" data-i18n="inqr.download">Descargar Código</span>
                 </button>
 
                 <div class="encoded-text">
-                  <p>Datos codificados:</p>
+                  <p data-i18n="inqr.encoded_data">Datos codificados:</p>
                   <div class="encoded-text-content" id="encodedText"></div>
                 </div>
               </div>
@@ -204,7 +205,7 @@ import Layout from "../../layouts/LayoutEditors.astro";
 
         <!-- Footer -->
         <div class="footer">
-          <p>Genera códigos QR gratuitamente · No recopilamos tus datos</p>
+          <p data-i18n="inqr.footer">Genera códigos QR gratuitamente · No recopilamos tus datos</p>
         </div>
       </div>
 
