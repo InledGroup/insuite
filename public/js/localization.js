@@ -685,18 +685,30 @@ class Localization {
     updateSwitch() {
         const switchEl = document.getElementById('lang-switch-input');
         const labelEl = document.getElementById('lang-switch-label');
-        if (switchEl) {
-            switchEl.checked = this.lang === 'en';
-        }
-        if (labelEl) {
-            labelEl.textContent = this.lang === 'es' ? 'ES' : 'EN';
-        }
+        const switchElMobile = document.getElementById('lang-switch-input-mobile');
+        const labelElMobile = document.getElementById('lang-switch-label-mobile');
+
+        const isEn = this.lang === 'en';
+        const labelText = isEn ? 'EN' : 'ES';
+
+        if (switchEl) switchEl.checked = isEn;
+        if (switchElMobile) switchElMobile.checked = isEn;
+        
+        if (labelEl) labelEl.textContent = labelText;
+        if (labelElMobile) labelElMobile.textContent = labelText;
     }
 
     setupSwitch() {
         const switchEl = document.getElementById('lang-switch-input');
+        const switchElMobile = document.getElementById('lang-switch-input-mobile');
+
         if (switchEl) {
             switchEl.addEventListener('change', () => {
+                this.toggle();
+            });
+        }
+        if (switchElMobile) {
+            switchElMobile.addEventListener('change', () => {
                 this.toggle();
             });
         }

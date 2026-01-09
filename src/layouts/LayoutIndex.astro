@@ -28,11 +28,5 @@ const { i18nTitle } = Astro.props;
     <body data-i18n-title={i18nTitle}>
         <slot />
         <Sub />
-        <script>
-            // Este script debe ir aquí para asegurar que el DOM esté cargado
-            document.getElementById('menu-toggle')?.addEventListener('click', () => {
-                document.querySelector('.mobile-menu')?.classList.toggle('active');
-            });
-        </script>
     </body>
 </html>

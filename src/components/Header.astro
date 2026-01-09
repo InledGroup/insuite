@@ -22,7 +22,7 @@
         <div class="nav-actions">
           <a href="https://help.inled.es" class="nav-link" data-i18n="landing.header.docs">Documentación</a>
           
-          <div class="lang-switch-header">
+          <div class="lang-switch-header desktop-only">
               <input type="checkbox" id="lang-switch-input" style="display:none">
               <label for="lang-switch-input" id="lang-switch-label" class="lang-label">ES</label>
           </div>
@@ -30,17 +30,190 @@
           <a href="/apps" class="btn btn-primary" data-i18n="landing.header.access">Acceder gratis</a>
         </div>
 
-        <button class="mobile-menu-btn" aria-label="Toggle mobile menu">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+        <div class="mobile-controls">
+           <div class="lang-switch-header mobile-only">
+              <input type="checkbox" id="lang-switch-input-mobile" style="display:none">
+              <label for="lang-switch-input-mobile" id="lang-switch-label-mobile" class="lang-label">ES</label>
+          </div>
+          <button class="mobile-menu-btn" id="menu-toggle" aria-label="Toggle mobile menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
       </div>
     </div>
   </nav>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <ul class="mobile-nav-list">
+      <li><a href="#características" class="mobile-nav-link" data-i18n="landing.header.features">Características</a></li>
+      <li><a href="#editores" class="mobile-nav-link" data-i18n="landing.header.editors">Editores</a></li>
+      <li><a href="https://help.inled.es" class="mobile-nav-link" data-i18n="landing.header.docs">Documentación</a></li>
+      <li><a href="/apps" class="mobile-nav-link" data-i18n="landing.header.access">Acceder gratis</a></li>
+    </ul>
+  </div>
 </header>
 
+<script>
+  const menuBtn = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+
+  // Sync language switches
+  const desktopSwitch = document.getElementById('lang-switch-input');
+  const mobileSwitch = document.getElementById('lang-switch-input-mobile');
+  const desktopLabel = document.getElementById('lang-switch-label');
+  const mobileLabel = document.getElementById('lang-switch-label-mobile');
+
+  function updateLabels(lang) {
+      const label = lang === 'en' ? 'EN' : 'ES';
+      if(desktopLabel) desktopLabel.textContent = label;
+      if(mobileLabel) mobileLabel.textContent = label;
+  }
+
+  // Initial sync (assuming logic is handled externally or locally)
+  // This part is just illustrative for the sync, the actual switching logic 
+  // is likely in localization.js. We just ensure UI consistency.
+  
+  menuBtn?.addEventListener('click', () => {
+    menuBtn.classList.toggle('active');
+    mobileMenu?.classList.toggle('active');
+    document.body.style.overflow = mobileMenu?.classList.contains('active') ? 'hidden' : '';
+  });
+
+  mobileLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      menuBtn?.classList.remove('active');
+      mobileMenu?.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+  });
+</script>
+
 <style>
+/* Mobile Controls */
+.mobile-controls {
+  display: none;
+  align-items: center;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .mobile-controls {
+    display: flex;
+  }
+  
+  .desktop-only {
+    display: none !important;
+  }
+}
+
+/* Mobile Menu Curtain Effect */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0; /* Start hidden */
+  background-color: var(--color-white);
+  z-index: 990; /* Below header (1000) */
+  overflow: hidden;
+  transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 80px; /* Space for the fixed header */
+}
+
+.mobile-menu.active {
+  height: 100vh; /* Cover screen but header stays on top due to z-index */
+}
+
+.mobile-nav-list {
+  list-style: none;
+  text-align: center;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.mobile-nav-link {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-gray-900);
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+  display: block;
+}
+
+.mobile-menu.active .mobile-nav-link {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered delay for appear effect */
+.mobile-menu.active .mobile-nav-link:nth-child(1) { transition-delay: 0.1s; }
+.mobile-menu.active .mobile-nav-link:nth-child(2) { transition-delay: 0.2s; }
+.mobile-menu.active .mobile-nav-link:nth-child(3) { transition-delay: 0.3s; }
+.mobile-menu.active .mobile-nav-link:nth-child(4) { transition-delay: 0.4s; }
+
+/* Hamburger Animation to X */
+.mobile-menu-btn {
+  width: 30px;
+  height: 24px;
+  position: relative;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1001; /* Ensure button is clickable above menu */
+}
+
+.mobile-menu-btn span {
+  display: block;
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  background: var(--color-gray-900);
+  border-radius: 2px;
+  opacity: 1;
+  left: 0;
+  transform: rotate(0deg);
+  transition: .25s ease-in-out;
+}
+
+.mobile-menu-btn span:nth-child(1) {
+  top: 0px;
+}
+
+.mobile-menu-btn span:nth-child(2) {
+  top: 10px;
+}
+
+.mobile-menu-btn span:nth-child(3) {
+  top: 20px;
+}
+
+.mobile-menu-btn.active span:nth-child(1) {
+  top: 10px;
+  transform: rotate(135deg);
+}
+
+.mobile-menu-btn.active span:nth-child(2) {
+  opacity: 0;
+  left: -60px;
+}
+
+.mobile-menu-btn.active span:nth-child(3) {
+  top: 10px;
+  transform: rotate(-135deg);
+}
+
 .lang-switch-header {
     display: flex;
     align-items: center;
@@ -51,7 +224,7 @@
     cursor: pointer;
     font-weight: 600;
     font-size: 0.9rem;
-    color: var(--color-gray-300);
+    color: var(--color-gray-700);
     padding: 0.5rem;
     border: 1px solid var(--color-gray-700);
     border-radius: 6px;
@@ -64,5 +237,19 @@
 .lang-label:hover {
     background: var(--color-gray-800);
     color: white;
+}
+
+@media (min-width: 769px) {
+  .mobile-menu {
+    display: none;
+  }
+  .mobile-only {
+    display: none !important;
+  }
+}
+
+.mobile-controls {
+    z-index: 1002;
+    position: relative;
 }
 </style>
