@@ -44,8 +44,61 @@ const { title = "Insuite Editors", description = "Herramientas de edición", i18
         
     </head>
     <body data-i18n-title={i18nTitle}>
+        <script is:inline>
+            if (new URLSearchParams(window.location.search).get('client') === 'edgeai') {
+                document.documentElement.classList.add('edge-ai-mode');
+            }
+        </script>
         <slot />
-        <Sub />
+        <div id="sub-wrapper">
+            <Sub />
+        </div>
+        <style is:global>
+            /* Edge AI Global Mode Styles */
+            .edge-ai-mode #sub-wrapper,
+            .edge-ai-mode .sidebar,
+            .edge-ai-mode .top-bar,
+            .edge-ai-mode header,
+            .edge-ai-mode .header,
+            .edge-ai-mode .footer,
+            .edge-ai-mode footer,
+            .edge-ai-mode .docs-section {
+                display: none !important;
+            }
+
+            .edge-ai-mode,
+            .edge-ai-mode body, 
+            .edge-ai-mode .app-container,
+            .edge-ai-mode .main-content,
+            .edge-ai-mode .content-wrapper {
+                background: transparent !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                max-width: none !important;
+                width: 100% !important;
+                height: 100vh !important;
+                min-height: 0 !important;
+                display: block !important;
+                overflow: hidden !important;
+            }
+
+            .edge-ai-mode .content-wrapper,
+            .edge-ai-mode .main-content {
+                height: 100vh !important;
+                display: flex !important;
+                flex-direction: column !important;
+            }
+
+            /* Tool Specific Cleanups */
+            .edge-ai-mode .editor-wrapper,
+            .edge-ai-mode .editor-panel {
+                border: none !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                flex: 1 !important;
+                height: 100% !important;
+            }
+        </style>
         <script>
             // Este script debe ir aquí para asegurar que el DOM esté cargado
             document

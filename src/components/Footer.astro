@@ -54,7 +54,70 @@
           <a href="/privacy-policy" data-i18n="landing.footer.privacy">Política de Privacidad</a>
           <a href="/terminos" data-i18n="landing.footer.terms">Términos de Servicio</a>
           <a href="/cookie-policy" data-i18n="landing.footer.cookies">Política de Cookies</a>
+          <button id="copyPromptBtn" class="prompt-btn" data-i18n="landing.footer.ai_prompt">Prompt para IA (URLs)</button>
         </div>
+
+        <script is:inline>
+          document.getElementById('copyPromptBtn')?.addEventListener('click', async () => {
+            const prompt = `# Guía de Sintaxis de URL para InSuite (InLinked & InQR)
+
+Utiliza estas reglas para generar enlaces que configuren automáticamente las herramientas de InSuite.
+
+## 1. InLinked (Formateador de LinkedIn)
+Base URL: https://insuite.inled.es/inlinked/
+Parámetro principal: ?t= (Texto con marcas de formato ASCII)
+
+Marcas de formato:
+- Negrita: **texto**
+- Cursiva: _texto_
+- Subrayado: <u>texto</u>
+- Tachado: ~~texto~~
+- Código: \`texto\`
+- Style Script: [s]texto[/s]
+- Style Gothic: [g]texto[/g]
+- Style Double: [d]texto[/d]
+
+Ejemplo: ?t=**Hola** _mundo_ [s]script[/s]
+
+---
+
+## 2. InQR (Generador de QR y Barras)
+Base URL: https://insuite.inled.es/inqr/
+Parámetros:
+- type: text, wifi o barcode
+- generatenow=true: Genera el código automáticamente al cargar.
+- client=edgeai: Modo embebido (fondo transparente, solo el código).
+
+Modos:
+1. Texto/URL: ?type=text&v=TU_TEXTO
+2. WiFi: ?type=wifi&s=SSID&p=PASSWORD&sec=WPA (sec puede ser WPA, WEP o nopass)
+3. Código de Barras: ?type=barcode&v=12345
+
+Ejemplo completo: ?type=text&v=https://google.com&generatenow=true&client=edgeai
+
+---
+
+## 3. Parámetro Global "Client"
+- client=edgeai: Se puede añadir a cualquier herramienta para ocultar la interfaz (sidebar, footer, menús) y dejar solo el componente principal sobre fondo transparente.`;
+
+            try {
+              await navigator.clipboard.writeText(prompt);
+              const btn = document.getElementById('copyPromptBtn');
+              const originalText = btn.textContent;
+              const successText = window.Localization?.t('landing.footer.prompt_copied') || '¡Copiado!';
+              
+              btn.textContent = successText;
+              btn.classList.add('success');
+              
+              setTimeout(() => {
+                btn.textContent = originalText;
+                btn.classList.remove('success');
+              }, 2000);
+            } catch (err) {
+              console.error('Error al copiar el prompt', err);
+            }
+          });
+        </script>
         <div class="copyright">
           <p data-i18n="landing.footer.copyright">&copy; 2025 Inled Group por el diseño web.</p>
         </div>
@@ -180,6 +243,30 @@
 
   .legal-links a:hover {
     color: var(--color-white);
+  }
+
+  .prompt-btn {
+    background: transparent;
+    border: 1px solid var(--color-gray-700);
+    color: var(--color-gray-400);
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    margin-left: var(--spacing-2);
+  }
+
+  .prompt-btn:hover {
+    color: var(--color-white);
+    border-color: var(--color-gray-500);
+    background: var(--color-gray-800);
+  }
+
+  .prompt-btn.success {
+    border-color: #10b981;
+    color: #10b981;
   }
 
   .copyright {

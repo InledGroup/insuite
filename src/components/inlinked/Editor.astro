@@ -330,7 +330,104 @@ import {
     }
   }
 
-  quill.on('text-change', updateCharCount);
+  // URL Synchronization Logic
+  function deltaToMarkdown(delta: any) {
+      let markdown = '';
+      delta.ops.forEach((op: any) => {
+          if (typeof op.insert !== 'string') return;
+          let text = op.insert;
+          if (op.attributes) {
+              if (op.attributes.bold) text = `**${text}**`;
+              if (op.attributes.italic) text = `_${text}_`;
+              if (op.attributes.underline) text = `<u>${text}</u>`;
+              if (op.attributes.strike) text = `~~${text}~~`;
+              if (op.attributes.code) text = `\`${text}\``;
+              
+              // Custom LinkedIn styles
+              if (op.attributes.script) text = `[s]${text}[/s]`;
+              if (op.attributes.gothic) text = `[g]${text}[/g]`;
+              if (op.attributes.doublestruck) text = `[d]${text}[/d]`;
+          }
+          markdown += text;
+      });
+      return markdown;
+  }
+
+  function applyMarkdownToQuill(markdown: string) {
+      quill.setText(''); // Clear editor
+      
+      // A simple parser that handles the markers we defined
+      // We process markers from most specific to least specific or use a regex-based insertion
+      // For simplicity and to avoid complex nested parsing, we'll use a regex that identifies segments
+      
+      const regex = /(\*\*|_|~~|<u>|<\/u>|`|\[s\]|\[\/s\]|\[g\]|\[\/g\]|\[d\]|\[\/d\])/g;
+      const parts = markdown.split(regex);
+      
+      let currentAttributes: any = {};
+      
+      parts.forEach(part => {
+          if (!part) return;
+          
+          if (part === '**') { currentAttributes.bold = !currentAttributes.bold; return; }
+          if (part === '_') { currentAttributes.italic = !currentAttributes.italic; return; }
+          if (part === '<u>') { currentAttributes.underline = true; return; }
+          if (part === '</u>') { currentAttributes.underline = false; return; }
+          if (part === '~~') { currentAttributes.strike = !currentAttributes.strike; return; }
+          if (part === '`') { currentAttributes.code = !currentAttributes.code; return; }
+          if (part === '[s]') { currentAttributes.script = true; return; }
+          if (part === '[/s]') { currentAttributes.script = false; return; }
+          if (part === '[g]') { currentAttributes.gothic = true; return; }
+          if (part === '[/g]') { currentAttributes.gothic = false; return; }
+          if (part === '[d]') { currentAttributes.doublestruck = true; return; }
+          if (part === '[/d]') { currentAttributes.doublestruck = false; return; }
+          
+          // It's text, insert with current attributes
+          const activeAttrs: any = {};
+          if (currentAttributes.bold) activeAttrs.bold = true;
+          if (currentAttributes.italic) activeAttrs.italic = true;
+          if (currentAttributes.underline) activeAttrs.underline = true;
+          if (currentAttributes.strike) activeAttrs.strike = true;
+          if (currentAttributes.code) activeAttrs.code = true;
+          if (currentAttributes.script) activeAttrs.script = true;
+          if (currentAttributes.gothic) activeAttrs.gothic = true;
+          if (currentAttributes.doublestruck) activeAttrs.doublestruck = true;
+          
+          quill.insertText(quill.getLength() - 1, part, activeAttrs);
+      });
+  }
+
+  let urlSyncTimeout: ReturnType<typeof setTimeout>;
+  function updateURL() {
+      clearTimeout(urlSyncTimeout);
+      urlSyncTimeout = setTimeout(() => {
+          const delta = quill.getContents();
+          const markdown = deltaToMarkdown(delta);
+          const url = new URL(window.location.href);
+          
+          const currentT = url.searchParams.get('t');
+          if (markdown.trim() === currentT?.trim() && !(!markdown.trim() && currentT)) return;
+
+          if (markdown.trim()) {
+              url.searchParams.set('t', markdown);
+          } else {
+              url.searchParams.delete('t');
+          }
+          window.history.replaceState({}, '', url.toString());
+      }, 800);
+  }
+
+  quill.on('text-change', () => {
+      updateCharCount();
+      updateURL();
+  });
+  
+  // Initial Load from URL
+  const params = new URLSearchParams(window.location.search);
+  const initialMarkdown = params.get('t');
+  if (initialMarkdown) {
+      applyMarkdownToQuill(initialMarkdown);
+      updateCharCount();
+  }
   
   // Custom Format Handlers (LinkedIn Styles)
   customBtns.forEach(btn => {

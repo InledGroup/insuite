@@ -27,6 +27,25 @@ import { ExternalLink } from 'lucide-astro';
       
       <div class="content-wrapper">
           <Editor />
+          
+          <div class="docs-section">
+            <details class="url-docs">
+                <summary data-i18n="inlinked.docs_title">Cómo formatear vía URL</summary>
+                <div class="docs-content">
+                    <p data-i18n="inlinked.docs_desc">Puedes compartir textos formateados usando el parámetro <code>?t=</code> en la URL:</p>
+                    <div class="grid-docs">
+                        <div class="doc-item"><code>**negrita**</code> <span>&rarr;</span> <strong>negrita</strong></div>
+                        <div class="doc-item"><code>_cursiva_</code> <span>&rarr;</span> <em>cursiva</em></div>
+                        <div class="doc-item"><code>&lt;u&gt;subr.&lt;/u&gt;</code> <span>&rarr;</span> <u>subrayado</u></div>
+                        <div class="doc-item"><code>~~tachado~~</code> <span>&rarr;</span> <del>tachado</del></div>
+                        <div class="doc-item"><code>`código`</code> <span>&rarr;</span> <code>código</code></div>
+                        <div class="doc-item"><code>[s]script[/s]</code> <span>&rarr;</span> <span style="font-family: serif; font-style: italic;">Script</span></div>
+                        <div class="doc-item"><code>[g]gothic[/g]</code> <span>&rarr;</span> <span style="font-family: serif;">Gothic</span></div>
+                        <div class="doc-item"><code>[d]double[/d]</code> <span>&rarr;</span> <span style="font-family: serif; letter-spacing: 1px;">Dｏｕｂｌｅ</span></div>
+                    </div>
+                </div>
+            </details>
+          </div>
       </div>
 
       <footer class="footer">
@@ -117,6 +136,87 @@ import { ExternalLink } from 'lucide-astro';
       font-size: 0.875rem;
       border-top: 1px solid #e2e8f0;
       background: white;
+  }
+
+  /* Docs Styles */
+  .docs-section {
+      margin-top: 2rem;
+  }
+
+  .url-docs {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+  }
+
+  .url-docs[open] {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+
+  .url-docs summary {
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      color: #0f172a;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      user-select: none;
+  }
+
+  .url-docs summary::before {
+      content: '→';
+      display: inline-block;
+      transition: transform 0.2s ease;
+      color: #64748b;
+  }
+
+  .url-docs[open] summary::before {
+      transform: rotate(90deg);
+  }
+
+  .docs-content {
+      padding: 0 1.5rem 1.5rem 1.5rem;
+      border-top: 1px solid #f1f5f9;
+      color: #475569;
+      font-size: 0.9375rem;
+  }
+
+  .docs-content p {
+      margin: 1rem 0;
+  }
+
+  .grid-docs {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+  }
+
+  .doc-item {
+      background: #f8fafc;
+      padding: 0.75rem;
+      border-radius: 8px;
+      border: 1px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.875rem;
+  }
+
+  .doc-item code {
+      background: #e2e8f0;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      color: #0f172a;
+      font-weight: 500;
+  }
+
+  .doc-item span {
+      color: #94a3b8;
   }
 
   /* Responsive Design */

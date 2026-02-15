@@ -78,6 +78,8 @@ const translations = {
         "landing.footer.terms": "Términos de Servicio",
         "landing.footer.cookies": "Política de Cookies",
         "landing.footer.copyright": "© 2025 Inled Group por el diseño web.",
+        "landing.footer.ai_prompt": "Prompt para IA (URLs)",
+        "landing.footer.prompt_copied": "¡Prompt copiado!",
 
         // Features List (Common)
         "feat.ai_integration": "Integración de Inled AI",
@@ -206,6 +208,8 @@ const translations = {
         "inlinked.placeholder": "Escribe aquí tu post para LinkedIn...",
         "inlinked.confirm_clear": "¿Borrar todo el texto?",
         "inlinked.error_copy": "No se pudo copiar el texto.",
+        "inlinked.docs_title": "Cómo formatear vía URL",
+        "inlinked.docs_desc": "Puedes compartir textos formateados usando el parámetro <code>?t=</code> en la URL:",
 
         // InQR
         "inqr.title": "InQR | Genera QR gratis y privado",
@@ -264,6 +268,8 @@ const translations = {
         "inqr.tips_barcode_2": "• CODE 128 es el más versátil",
         "inqr.tips_barcode_3": "• Pronto añadiremos más tipos de códigos de barras.",
         "inqr.tips_barcode_4": "• Puedes generarlo también pulsando Enter",
+        "inqr.docs_title": "Generación vía URL",
+        "inqr.docs_desc": "Puedes generar códigos automáticamente usando parámetros (añade <code>&generatenow=true</code> para generar al cargar):",
 
 
         // MDOCX
@@ -373,6 +379,8 @@ const translations = {
         "landing.footer.terms": "Terms of Service",
         "landing.footer.cookies": "Cookie Policy",
         "landing.footer.copyright": "© 2025 Inled Group for web design.",
+        "landing.footer.ai_prompt": "AI Prompt (URLs)",
+        "landing.footer.prompt_copied": "Prompt copied!",
 
         // Features List (Common)
         "feat.ai_integration": "Inled AI Integration",
@@ -501,6 +509,8 @@ const translations = {
         "inlinked.placeholder": "Write your LinkedIn post here...",
         "inlinked.confirm_clear": "Clear all text?",
         "inlinked.error_copy": "Could not copy text.",
+        "inlinked.docs_title": "How to format via URL",
+        "inlinked.docs_desc": "You can share formatted texts using the <code>?t=</code> parameter in the URL:",
 
         // InQR
         "inqr.title": "InQR | Generate QR for free and private",
@@ -559,6 +569,8 @@ const translations = {
         "inqr.tips_barcode_2": "• CODE 128 is the most versatile",
         "inqr.tips_barcode_3": "• More barcode types coming soon.",
         "inqr.tips_barcode_4": "• You can also generate by pressing Enter",
+        "inqr.docs_title": "Generation via URL",
+        "inqr.docs_desc": "You can generate codes automatically using parameters (add <code>&generatenow=true</code> to auto-generate on load):",
 
 
         // MDOCX

@@ -286,10 +286,93 @@
       generateBtn.addEventListener('click', generateCode);
       downloadBtn.addEventListener('click', downloadCode);
 
-      // Input event listeners
-      textInput.addEventListener('input', updateGenerateButton);
-      wifiSSID.addEventListener('input', updateGenerateButton);
-      barcodeText.addEventListener('input', updateGenerateButton);
+      // URL Synchronization Logic
+      let urlSyncTimeout;
+      function updateURL() {
+          clearTimeout(urlSyncTimeout);
+          urlSyncTimeout = setTimeout(() => {
+              const url = new URL(window.location.href);
+              url.searchParams.set('type', currentType);
+
+              if (currentType === 'text') {
+                  const val = textInput.value.trim();
+                  if (val) url.searchParams.set('v', val);
+                  else url.searchParams.delete('v');
+                  ['s', 'p', 'sec', 'h'].forEach(p => url.searchParams.delete(p));
+              } else if (currentType === 'wifi') {
+                  const s = wifiSSID.value.trim();
+                  const p = wifiPassword.value.trim();
+                  const sec = wifiSecurity.value;
+                  const h = wifiHidden.checked;
+                  if (s) url.searchParams.set('s', s); else url.searchParams.delete('s');
+                  if (p) url.searchParams.set('p', p); else url.searchParams.delete('p');
+                  url.searchParams.set('sec', sec);
+                  url.searchParams.set('h', h);
+                  url.searchParams.delete('v');
+              } else if (currentType === 'barcode') {
+                  const val = barcodeText.value.trim();
+                  if (val) url.searchParams.set('v', val);
+                  else url.searchParams.delete('v');
+                  ['s', 'p', 'sec', 'h'].forEach(p => url.searchParams.delete(p));
+              }
+
+              // If a code is already generated, keep the generatenow flag
+              if (!codeResult.classList.contains('hidden')) {
+                  url.searchParams.set('generatenow', 'true');
+              } else {
+                  url.searchParams.delete('generatenow');
+              }
+
+              window.history.replaceState({}, '', url.toString());
+          }, 800);
+      }
+
+      function loadFromURL() {
+          const params = new URLSearchParams(window.location.search);
+          const type = params.get('type');
+          if (!type) return;
+
+          // Switch to tab
+          const tab = document.querySelector(`.type-tab[data-type="${type}"]`);
+          if (tab) tab.click();
+
+          if (type === 'text' || type === 'barcode') {
+              const v = params.get('v');
+              if (v) {
+                  if (type === 'text') textInput.value = v;
+                  else barcodeText.value = v;
+              }
+          } else if (type === 'wifi') {
+              const s = params.get('s');
+              const p = params.get('p');
+              const sec = params.get('sec');
+              const h = params.get('h');
+              if (s) wifiSSID.value = s;
+              if (p) wifiPassword.value = p;
+              if (sec) wifiSecurity.value = sec;
+              if (h === 'true') wifiHidden.checked = true;
+          }
+
+          updateGenerateButton();
+          
+          const generateNow = params.get('generatenow') === 'true';
+          const hasData = (currentType === 'text' && textInput.value) || 
+                          (currentType === 'barcode' && barcodeText.value) || 
+                          (currentType === 'wifi' && wifiSSID.value);
+          
+          if (hasData && generateNow) {
+              generateCode();
+          }
+      }
+
+      // Input event listeners to trigger URL sync and button state
+      textInput.addEventListener('input', () => { updateGenerateButton(); updateURL(); });
+      wifiSSID.addEventListener('input', () => { updateGenerateButton(); updateURL(); });
+      wifiPassword.addEventListener('input', () => { updateGenerateButton(); updateURL(); });
+      wifiSecurity.addEventListener('change', () => { updateGenerateButton(); updateURL(); });
+      wifiHidden.addEventListener('change', () => { updateGenerateButton(); updateURL(); });
+      barcodeText.addEventListener('input', () => { updateGenerateButton(); updateURL(); });
+      barcodeType.addEventListener('change', () => { updateGenerateButton(); updateURL(); });
 
       // Enter key to generate
       [textInput, wifiSSID, wifiPassword, barcodeText].forEach(input => {
@@ -301,12 +384,10 @@
       });
 
       // Initial state
-      // We wait for window load or just init
-      // Since localization might load after
+      loadFromURL();
       if (window.Localization) {
           updateUITexts();
       } else {
-          // Default
           updateTips('text');
       }
       updateGenerateButton();

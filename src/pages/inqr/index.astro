@@ -203,6 +203,30 @@ import Layout from "../../layouts/LayoutEditors.astro";
           </div>
         </div>
 
+        <!-- Documentation -->
+        <div class="docs-section">
+          <details class="url-docs">
+              <summary data-i18n="inqr.docs_title">Generación vía URL</summary>
+              <div class="docs-content">
+                  <p data-i18n="inqr.docs_desc">Puedes generar códigos automáticamente usando parámetros:</p>
+                  <div class="grid-docs">
+                      <div class="doc-item">
+                        <strong>Texto/QR:</strong>
+                        <code>?type=text&v=tu_texto</code>
+                      </div>
+                      <div class="doc-item">
+                        <strong>WiFi:</strong>
+                        <code>?type=wifi&s=SSID&p=PASS&sec=WPA</code>
+                      </div>
+                      <div class="doc-item">
+                        <strong>Barras:</strong>
+                        <code>?type=barcode&v=12345</code>
+                      </div>
+                  </div>
+              </div>
+          </details>
+        </div>
+
         <!-- Footer -->
         <div class="footer">
           <p data-i18n="inqr.footer">Genera códigos QR gratuitamente · No recopilamos tus datos</p>
