@@ -100,3 +100,10 @@
                 right: 10px;
             }
         }
+
+        /* Desktop - body padding to offset fixed sidebar */
+        @media (min-width: 769px) {
+            body {
+                padding-left: 48px;
+            }
+        }

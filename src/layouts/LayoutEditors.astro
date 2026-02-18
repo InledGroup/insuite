@@ -67,7 +67,7 @@ const { title = "Insuite Editors", description = "Herramientas de edición", i18
             }
 
             .edge-ai-mode,
-            .edge-ai-mode body, 
+            .edge-ai-mode body,
             .edge-ai-mode .app-container,
             .edge-ai-mode .main-content,
             .edge-ai-mode .content-wrapper {
@@ -80,6 +80,11 @@ const { title = "Insuite Editors", description = "Herramientas de edición", i18
                 min-height: 0 !important;
                 display: block !important;
                 overflow: hidden !important;
+            }
+
+            /* Edge AI mode also needs to remove the sidebar offset */
+            .edge-ai-mode body {
+                padding-left: 0 !important;
             }
 
             .edge-ai-mode .content-wrapper,
