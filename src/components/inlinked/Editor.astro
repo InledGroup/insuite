@@ -10,13 +10,20 @@ import {
     Type, 
     Eraser, 
     Copy, 
-    Trash2
+    Trash2,
+    CheckCircle2
 } from 'lucide-astro';
+
+interface Props {
+    platform?: 'linkedin' | 'x';
+}
+
+const { platform = 'linkedin' } = Astro.props;
 ---
 <!-- Import Quill Styles -->
 <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
 
-<div class="editor-wrapper">
+<div class="editor-wrapper" data-platform={platform}>
   <!-- Ribbon Toolbar -->
   <div id="toolbar" class="ribbon-toolbar">
     
@@ -69,6 +76,22 @@ import {
         </div>
     </div>
 
+    {platform === 'x' && (
+    <!-- Separator -->
+    <div class="separator"></div>
+
+    <!-- Platform Settings Group -->
+    <div class="ribbon-group">
+        <span class="group-label" data-i18n="inx.char_limit">Límite</span>
+        <div class="group-content">
+            <button id="proToggle" class="ribbon-btn" title="Activar modo Pro" data-i18n-tooltip="inx.pro_user">
+                <div class="icon-box"><CheckCircle2 class="icon" /></div>
+                <span class="label" data-i18n="inx.pro_user">Usuario Pro</span>
+            </button>
+        </div>
+    </div>
+    )}
+
     <!-- Separator -->
     <div class="separator"></div>
 
@@ -95,15 +118,66 @@ import {
   </div>
 
   <div class="editor-content-area">
-      <div id="editor" data-i18n-placeholder="inlinked.placeholder"></div>
+      <div id="editor" data-i18n-placeholder={platform === 'x' ? "inx.placeholder" : "inlinked.placeholder"}></div>
   </div>
   
   <div class="status-bar">
-    <span id="charCount">0 caracteres</span>
+    <div class="status-info">
+      <span id="wordCount">0 <span data-i18n="inx.words">palabras</span></span>
+      <span class="status-sep">|</span>
+      <span id="charCount">0 <span data-i18n="inx.characters">caracteres</span></span>
+    </div>
+    <div id="charLimitWarning" class="char-limit-warning hidden" data-i18n="inx.over_limit">
+      Límite de caracteres superado
+    </div>
   </div>
 </div>
 
 <style>
+  .editor-wrapper[data-platform="x"] {
+      border-color: #334155;
+      background-color: #000;
+  }
+  
+  .editor-wrapper[data-platform="x"] .ribbon-toolbar {
+      background: #000;
+      border-bottom-color: #334155;
+  }
+  
+  .editor-wrapper[data-platform="x"] .group-label {
+      color: #64748b;
+  }
+  
+  .editor-wrapper[data-platform="x"] .ribbon-btn {
+      color: #94a3b8;
+  }
+  
+  .editor-wrapper[data-platform="x"] .ribbon-btn:hover {
+      background: #1e293b;
+      color: #f8fafc;
+  }
+  
+  .editor-wrapper[data-platform="x"] .ribbon-btn.ql-active, 
+  .editor-wrapper[data-platform="x"] .ribbon-btn.active {
+      background: #334155;
+      color: #38bdf8;
+  }
+
+  .editor-wrapper[data-platform="x"] #editor {
+      background: #000;
+      color: #e2e8f0;
+  }
+
+  .editor-wrapper[data-platform="x"] .status-bar {
+      background: #000;
+      border-top-color: #334155;
+      color: #94a3b8;
+  }
+  
+  .editor-wrapper[data-platform="x"] .separator {
+      background: #334155;
+  }
+
   .editor-wrapper {
     background: #ffffff;
     border-radius: 8px;
@@ -113,6 +187,7 @@ import {
     flex-direction: column;
     height: 100%;
     overflow: hidden;
+    transition: border-color 0.3s ease;
   }
 
   .ribbon-toolbar {
@@ -193,6 +268,11 @@ import {
       background: #cbd5e1;
       color: #0f172a;
   }
+  
+  #toolbar .ribbon-btn.active[id="proToggle"] {
+      color: #38bdf8;
+      background: #0c4a6e22;
+  }
 
   #toolbar .ribbon-btn.primary {
       color: #0f172a;
@@ -252,7 +332,40 @@ import {
     border-top: 1px solid #e2e8f0;
     font-size: 0.75rem;
     color: #64748b;
-    text-align: right;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .status-info {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+  }
+  
+  .status-sep {
+      color: #cbd5e1;
+  }
+  
+  .char-limit-warning {
+      color: #ef4444;
+      font-weight: 600;
+      animation: fadeIn 0.3s;
+  }
+  
+  .char-limit-warning.hidden {
+      display: none;
+  }
+  
+  @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+  }
+  
+  /* Overflow Highlight */
+  .ql-overflow {
+      background-color: rgba(239, 68, 68, 0.2) !important;
+      border-bottom: 2px solid #ef4444;
   }
   
   /* Quill Overrides */
@@ -265,6 +378,11 @@ import {
       border: none !important;
   }
   
+  .ql-editor.ql-blank::before {
+      color: #94a3b8 !important;
+      font-style: normal !important;
+  }
+
   /* Mobile adjustments */
   @media (max-width: 640px) {
       .ribbon-toolbar {
@@ -277,23 +395,55 @@ import {
       .label {
           font-size: 0.65rem;
       }
+      .status-info span {
+          font-size: 0.7rem;
+      }
   }
 </style>
 
 <script>
+  console.log('InLinked/InX Editor Script Loaded');
   import Quill from 'quill';
   import { deltaToUnicode } from '../../utils/deltaToUnicode';
   import { toUnicodeVariant } from '../../utils/toUnicodeVariant';
   import { unicodeToAscii } from '../../utils/unicodeToAscii';
 
+  // Register Custom Overflow Format
+  const Inline = Quill.import('blots/inline');
+  class OverflowBlot extends Inline {
+    static blotName = 'overflow';
+    static className = 'ql-overflow';
+    static tagName = 'span';
+  }
+  Quill.register(OverflowBlot);
+
+  const wrapper = document.querySelector('.editor-wrapper') as HTMLElement;
+  const platform = wrapper?.dataset.platform || 'linkedin';
+  console.log('Platform detected:', platform);
+  
   const charCount = document.getElementById('charCount');
+  const wordCount = document.getElementById('wordCount');
+  const charLimitWarning = document.getElementById('charLimitWarning');
   const copyBtn = document.getElementById('copyBtn');
   const copyLabel = document.getElementById('copyLabel');
   const copyIconBox = document.getElementById('copyIconBox');
   const clearBtn = document.getElementById('clearBtn');
+  const proToggle = document.getElementById('proToggle');
   const customBtns = document.querySelectorAll('.custom-btn');
   const formatBtns = document.querySelectorAll('.format-btn');
   
+  let isPro = false;
+  const limits = {
+      linkedin: 3000,
+      x: 280,
+      x_pro: 25000
+  };
+
+  function getCharLimit() {
+      if (platform === 'linkedin') return limits.linkedin;
+      return isPro ? limits.x_pro : limits.x;
+  }
+
   // Wait for localization
   const getT = (key, defaultText) => {
       if (window.Localization) {
@@ -308,26 +458,65 @@ import {
     modules: {
         toolbar: '#toolbar'
     },
-    placeholder: 'Escribe aquí tu post para LinkedIn...' // Default, will be updated by localization
+    placeholder: platform === 'x' ? '¿Qué está pasando?' : 'Escribe aquí tu post para LinkedIn...'
   });
   
   // Apply placeholder from localization if available or listener
-  window.addEventListener('languageChanged', () => {
-       const ph = window.Localization.t('inlinked.placeholder');
+  const updatePlaceholder = () => {
+       const ph = window.Localization.t(platform === 'x' ? 'inx.placeholder' : 'inlinked.placeholder');
        quill.root.dataset.placeholder = ph;
-  });
-  // Initial check
-  if (window.Localization) {
-       quill.root.dataset.placeholder = window.Localization.t('inlinked.placeholder');
+  };
+
+  window.addEventListener('languageChanged', updatePlaceholder);
+  if (window.Localization) updatePlaceholder();
+
+
+  function updateCounts() {
+    const text = quill.getText();
+    const length = Math.max(0, text.length - 1);
+    const words = text.trim() ? text.trim().split(/\s+/).filter(w => w.length > 0).length : 0;
+    const limit = getCharLimit();
+
+    console.log(`Counts - Length: ${length}, Words: ${words}, Limit: ${limit}`);
+
+    if (charCount) {
+        charCount.textContent = `${length} / ${limit} ${getT('inx.characters', 'caracteres')}`;
+    }
+    if (wordCount) {
+        wordCount.textContent = `${words} ${getT('inx.words', 'palabras')}`;
+    }
+    
+    if (length > limit) {
+        charLimitWarning?.classList.remove('hidden');
+        if (charCount) charCount.style.color = '#ef4444';
+        console.log('Highlighting overflow...');
+        highlightOverflow(limit, length);
+    } else {
+        charLimitWarning?.classList.add('hidden');
+        if (charCount) charCount.style.color = '';
+        removeOverflow();
+    }
   }
 
+  function highlightOverflow(limit: number, length: number) {
+      console.log('Formatting overflow from', limit, 'to', length);
+      quill.off('text-change', handleTextChange);
+      const range = quill.getSelection();
+      
+      // Clear previous overflow formats in the affected range
+      quill.formatText(0, length + 1, 'overflow', false);
+      // Apply to excess
+      quill.formatText(limit, length - limit, 'overflow', true);
+      
+      if (range) quill.setSelection(range);
+      quill.on('text-change', handleTextChange);
+  }
 
-  function updateCharCount() {
-    const text = quill.getText();
-    if (charCount) {
-      const length = Math.max(0, text.length - 1);
-      charCount.textContent = `${length} caracteres`;
-    }
+  function removeOverflow() {
+      quill.off('text-change', handleTextChange);
+      const length = quill.getLength();
+      quill.formatText(0, length + 1, 'overflow', false);
+      quill.on('text-change', handleTextChange);
   }
 
   // URL Synchronization Logic
@@ -343,7 +532,7 @@ import {
               if (op.attributes.strike) text = `~~${text}~~`;
               if (op.attributes.code) text = `\`${text}\``;
               
-              // Custom LinkedIn styles
+              // Custom styles
               if (op.attributes.script) text = `[s]${text}[/s]`;
               if (op.attributes.gothic) text = `[g]${text}[/g]`;
               if (op.attributes.doublestruck) text = `[d]${text}[/d]`;
@@ -354,20 +543,13 @@ import {
   }
 
   function applyMarkdownToQuill(markdown: string) {
-      quill.setText(''); // Clear editor
-      
-      // A simple parser that handles the markers we defined
-      // We process markers from most specific to least specific or use a regex-based insertion
-      // For simplicity and to avoid complex nested parsing, we'll use a regex that identifies segments
-      
+      quill.setText('');
       const regex = /(\*\*|_|~~|<u>|<\/u>|`|\[s\]|\[\/s\]|\[g\]|\[\/g\]|\[d\]|\[\/d\])/g;
       const parts = markdown.split(regex);
-      
       let currentAttributes: any = {};
       
       parts.forEach(part => {
           if (!part) return;
-          
           if (part === '**') { currentAttributes.bold = !currentAttributes.bold; return; }
           if (part === '_') { currentAttributes.italic = !currentAttributes.italic; return; }
           if (part === '<u>') { currentAttributes.underline = true; return; }
@@ -381,17 +563,7 @@ import {
           if (part === '[d]') { currentAttributes.doublestruck = true; return; }
           if (part === '[/d]') { currentAttributes.doublestruck = false; return; }
           
-          // It's text, insert with current attributes
-          const activeAttrs: any = {};
-          if (currentAttributes.bold) activeAttrs.bold = true;
-          if (currentAttributes.italic) activeAttrs.italic = true;
-          if (currentAttributes.underline) activeAttrs.underline = true;
-          if (currentAttributes.strike) activeAttrs.strike = true;
-          if (currentAttributes.code) activeAttrs.code = true;
-          if (currentAttributes.script) activeAttrs.script = true;
-          if (currentAttributes.gothic) activeAttrs.gothic = true;
-          if (currentAttributes.doublestruck) activeAttrs.doublestruck = true;
-          
+          const activeAttrs: any = { ...currentAttributes };
           quill.insertText(quill.getLength() - 1, part, activeAttrs);
       });
   }
@@ -403,7 +575,6 @@ import {
           const delta = quill.getContents();
           const markdown = deltaToMarkdown(delta);
           const url = new URL(window.location.href);
-          
           const currentT = url.searchParams.get('t');
           if (markdown.trim() === currentT?.trim() && !(!markdown.trim() && currentT)) return;
 
@@ -416,30 +587,38 @@ import {
       }, 800);
   }
 
-  quill.on('text-change', () => {
-      updateCharCount();
+  function handleTextChange() {
+      updateCounts();
       updateURL();
-  });
+  }
+
+  quill.on('text-change', handleTextChange);
   
+  // Pro Toggle
+  proToggle?.addEventListener('click', () => {
+      isPro = !isPro;
+      if (isPro) proToggle.classList.add('active');
+      else proToggle.classList.remove('active');
+      updateCounts();
+  });
+
   // Initial Load from URL
   const params = new URLSearchParams(window.location.search);
   const initialMarkdown = params.get('t');
   if (initialMarkdown) {
       applyMarkdownToQuill(initialMarkdown);
-      updateCharCount();
   }
+  updateCounts();
   
-  // Custom Format Handlers (LinkedIn Styles)
+  // Custom Format Handlers
   customBtns.forEach(btn => {
       btn.addEventListener('click', () => {
           const variant = (btn as HTMLElement).dataset.variant;
           if (!variant) return;
-          
           const range = quill.getSelection();
           if (range && range.length > 0) {
               const text = quill.getText(range.index, range.length);
               const converted = toUnicodeVariant(text, variant);
-              
               quill.deleteText(range.index, range.length);
               quill.insertText(range.index, converted);
               quill.setSelection(range.index, converted.length);
@@ -447,15 +626,11 @@ import {
       });
   });
 
-  // Standard Format Handlers & Clean
   formatBtns.forEach(btn => {
       btn.addEventListener('click', () => {
           const format = (btn as HTMLElement).dataset.format;
           if (!format) return;
-          
           if (format === 'clean') {
-               // Custom Clean Logic
-               // Try to normalize Unicode first
                const range = quill.getSelection();
                if (range && range.length > 0) {
                    const text = quill.getText(range.index, range.length);
@@ -465,7 +640,6 @@ import {
                        quill.insertText(range.index, normalized);
                        quill.setSelection(range.index, normalized.length);
                    }
-                   // Also remove standard formatting
                    quill.removeFormat(range.index, range.length);
                }
           } else {
@@ -475,7 +649,6 @@ import {
       });
   });
 
-  // Update Active State on Selection Change
   quill.on('editor-change', (eventName, ...args) => {
       if (eventName === 'selection-change') {
           const range = args[0];
@@ -484,35 +657,26 @@ import {
               formatBtns.forEach(btn => {
                   const format = (btn as HTMLElement).dataset.format;
                   if (format && format !== 'clean') {
-                      if (formats[format]) {
-                          btn.classList.add('active');
-                      } else {
-                          btn.classList.remove('active');
-                      }
+                      if (formats[format]) btn.classList.add('active');
+                      else btn.classList.remove('active');
                   }
               });
           }
       }
   });
 
-  // Copy Functionality
   copyBtn?.addEventListener('click', async () => {
       const delta = quill.getContents();
       const unicodeText = deltaToUnicode(delta);
-      
       try {
         await navigator.clipboard.writeText(unicodeText);
-        
-        // Visual Feedback
         if (copyLabel) copyLabel.textContent = getT('inlinked.copied', 'Copiado');
         if (copyBtn) copyBtn.classList.add('success');
-        
         setTimeout(() => {
             if (copyLabel) copyLabel.textContent = getT('inlinked.copy', 'Copiar');
             if (copyBtn) copyBtn.classList.remove('success');
         }, 2000);
       } catch (err) {
-        console.error('Failed to copy', err);
         alert(getT('inlinked.error_copy', 'No se pudo copiar el texto.'));
       }
   });
@@ -523,17 +687,12 @@ import {
       }
   });
   
-  // Update Copy Button Success Style dynamically
   const style = document.createElement('style');
   style.textContent = `
-    #toolbar .ribbon-btn.success {
-        color: #16a34a;
-        background: #dcfce7;
-    }
+    #toolbar .ribbon-btn.success { color: #16a34a; background: #dcfce7; }
   `;
   document.head.appendChild(style);
 
-  // Expose for external use if needed
   window.insertInVisualEditor = (text: string) => {
        const selection = quill.getSelection(true);
        quill.insertText(selection.index, text);

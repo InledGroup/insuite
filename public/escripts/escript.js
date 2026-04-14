@@ -71,7 +71,10 @@ document.querySelector('.install-button').addEventListener('click', function() {
                 // Replace with the actual URL for inLinked web application
                 url = '/inlinked';
                 break;
-            case 'inmd':
+            case 'inx':
+                // Replace with the actual URL for InX
+                url = '/inx';
+                break;            case 'inmd':
                 // Replace with the actual URL for inMD
                 url = '/inmd';
                 break;

@@ -121,6 +121,7 @@ const translations = {
         "apps.title": "Aplicaciones",
         "apps.mdpdf_desc": "Edita y previsualiza markdown y expórtalo a PDF",
         "apps.inlinked_desc": "Formatea texto para LinkedIN",
+        "apps.inx_desc": "Formatea texto para X / Twitter con IA",
         "apps.inmd_desc": "Edita markdown como si estuvieras en Word, sin ver código",
         "apps.indoc_desc": "Edita texto enriquecido online",
         "apps.inqr_desc": "crea códigos QR para webs, redes wifi y códigos de barras",
@@ -298,7 +299,18 @@ const translations = {
         "mdpdf.preview": "Vista previa",
         "mdpdf.report": "Reportar error",
         "mdpdf.generating": "Generando PDF...",
-        "mdpdf.placeholder": "# Mi Documento\n\nEscribe aquí tu contenido en Markdown..."
+        "mdpdf.placeholder": "# Mi Documento\n\nEscribe aquí tu contenido en Markdown...",
+
+        // InX
+        "inx.title": "InX | Formateador de texto para X / Twitter",
+        "inx.desc": "Formatea texto para X (Twitter) con IA y control de caracteres",
+        "inx.header": "InX",
+        "inx.placeholder": "¿Qué está pasando?",
+        "inx.pro_user": "Usuario Pro",
+        "inx.char_limit": "Límite de caracteres",
+        "inx.words": "palabras",
+        "inx.characters": "caracteres",
+        "inx.over_limit": "Has superado el límite de caracteres"
     },
     en: {
         // Global / Sidebar / Footer
@@ -422,6 +434,7 @@ const translations = {
         "apps.title": "Applications",
         "apps.mdpdf_desc": "Edit and preview markdown and export to PDF",
         "apps.inlinked_desc": "Format text for LinkedIn",
+        "apps.inx_desc": "Format text for X / Twitter with AI",
         "apps.inmd_desc": "Edit markdown as if in Word, without seeing code",
         "apps.indoc_desc": "Edit rich text online",
         "apps.inqr_desc": "Create QR codes for webs, wifi networks and barcodes",
@@ -599,7 +612,18 @@ const translations = {
         "mdpdf.preview": "Preview",
         "mdpdf.report": "Report bug",
         "mdpdf.generating": "Generating PDF...",
-        "mdpdf.placeholder": "# My Document\n\nWrite your Markdown content here..."
+        "mdpdf.placeholder": "# My Document\n\nWrite your Markdown content here...",
+
+        // InX
+        "inx.title": "InX | Text Formatter for X / Twitter",
+        "inx.desc": "Format text for X (Twitter) with AI and character control",
+        "inx.header": "InX",
+        "inx.placeholder": "What's happening?",
+        "inx.pro_user": "Pro User",
+        "inx.char_limit": "Character limit",
+        "inx.words": "words",
+        "inx.characters": "characters",
+        "inx.over_limit": "You have exceeded the character limit"
     }
 };
 
