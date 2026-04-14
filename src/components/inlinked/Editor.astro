@@ -363,9 +363,11 @@ const { platform = 'linkedin' } = Astro.props;
   }
   
   /* Overflow Highlight */
-  .ql-overflow {
-      background-color: rgba(239, 68, 68, 0.2) !important;
-      border-bottom: 2px solid #ef4444;
+  :global(.ql-editor mark.ql-overflow) {
+      background-color: #f4212e !important;
+      color: #ffffff !important;
+      border-bottom: 2px dotted white !important;
+      display: inline !important;
   }
   
   /* Quill Overrides */
@@ -413,7 +415,7 @@ const { platform = 'linkedin' } = Astro.props;
   class OverflowBlot extends Inline {
     static blotName = 'overflow';
     static className = 'ql-overflow';
-    static tagName = 'span';
+    static tagName = 'mark';
   }
   Quill.register(OverflowBlot);
 
@@ -499,23 +501,27 @@ const { platform = 'linkedin' } = Astro.props;
   }
 
   function highlightOverflow(limit: number, length: number) {
-      console.log('Formatting overflow from', limit, 'to', length);
+      console.log('highlightOverflow called', {limit, length});
       quill.off('text-change', handleTextChange);
       const range = quill.getSelection();
       
-      // Clear previous overflow formats in the affected range
-      quill.formatText(0, length + 1, 'overflow', false);
-      // Apply to excess
-      quill.formatText(limit, length - limit, 'overflow', true);
+      // First clear it from EVERYTHING to avoid artifacts
+      quill.formatText(0, quill.getLength(), 'overflow', false);
+      
+      // Then apply it ONLY to the excess
+      if (length > limit) {
+          console.log(`Applying overflow format from ${limit} for ${length - limit} chars`);
+          quill.formatText(limit, length - limit, 'overflow', true);
+      }
       
       if (range) quill.setSelection(range);
       quill.on('text-change', handleTextChange);
   }
 
   function removeOverflow() {
+      console.log('removeOverflow called');
       quill.off('text-change', handleTextChange);
-      const length = quill.getLength();
-      quill.formatText(0, length + 1, 'overflow', false);
+      quill.formatText(0, quill.getLength(), 'overflow', false);
       quill.on('text-change', handleTextChange);
   }
 
