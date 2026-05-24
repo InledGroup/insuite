@@ -36,25 +36,22 @@ document.addEventListener('DOMContentLoaded', function () {
         updatePreview();
         console.log('Editor inicializado correctamente');
         
-        // Gestión de gestos táctiles y botón toggle
-        let touchStartX = 0;
+        // Gestión de gestos táctiles y botones toggle
         const previewPanel = document.querySelector('.preview-panel');
         const toggleBtn = document.getElementById('btn-toggle-preview');
-        console.log('Botón toggle encontrado:', !!toggleBtn);
+        const welcomeModal = document.getElementById('welcome-modal');
+        const closeWelcomeBtn = document.getElementById('btn-close-welcome');
 
         if (toggleBtn) {
-            toggleBtn.addEventListener('click', (e) => {
-                console.log('Click detectado en el botón toggle');
+            toggleBtn.addEventListener('click', () => {
                 previewPanel.classList.toggle('--visible');
-                showMobileHelp();
             });
         }
 
-        function showMobileHelp() {
-            if (previewPanel.classList.contains('--visible') && !localStorage.getItem('mobileHelpShown')) {
-                alert('¡Consejo móvil! Puedes deslizar de izquierda a derecha en cualquier lugar de la pantalla para cerrar la previsualización.');
-                localStorage.setItem('mobileHelpShown', 'true');
-            }
+        if (closeWelcomeBtn) {
+            closeWelcomeBtn.addEventListener('click', () => {
+                welcomeModal.style.display = 'none';
+            });
         }
 
         document.addEventListener('touchstart', e => {
