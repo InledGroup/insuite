@@ -363,26 +363,25 @@ function downloadPDF() {
     <title>Exported with Inled Insuite MDPDF</title>
     <style>
         body {
-            font-family: 'Times New Roman', serif;
-            font-size: 12pt;
-            line-height: 1.6;
-            margin: 20mm;
-            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #2c3e50;
+            line-height: 1.7;
+            padding: 40px;
         }
-        h1 { font-size: 24pt; margin-bottom: 16pt; }
-        h2 { font-size: 20pt; margin-bottom: 14pt; }
-        h3 { font-size: 16pt; margin-bottom: 12pt; }
-        h4, h5, h6 { font-size: 14pt; margin-bottom: 10pt; }
-        p { margin-bottom: 12pt; text-align: justify; }
-        pre { background: #f5f5f5; padding: 10pt; border-radius: 4pt; font-size: 10pt; }
-        code { background: #f5f5f5; padding: 2pt 4pt; border-radius: 3pt; font-size: 10pt; }
-        blockquote { border-left: 4pt solid #ccc; margin-left: 0; padding-left: 15pt; color: #666; }
-        table { width: 100%; border-collapse: collapse; margin: 12pt 0; }
-        th, td { border: 1pt solid #ccc; padding: 8pt; }
-        th { background: #f5f5f5; font-weight: bold; }
-        ul, ol { margin-bottom: 12pt; }
-        li { margin-bottom: 6pt; }
-        hr { border: none; border-top: 1pt solid #ccc; margin: 20pt 0; }
+        h1 { font-size: 2em; margin-top: 1.5em; margin-bottom: 0.5em; border-bottom: 2px solid #eee; padding-bottom: 10px; color: #2c3e50; }
+        h2 { font-size: 1.7em; margin-top: 1.5em; margin-bottom: 0.5em; color: #2c3e50; }
+        h3 { font-size: 1.4em; margin-top: 1.5em; margin-bottom: 0.5em; color: #2c3e50; }
+        h4, h5, h6 { font-size: 1.2em; margin-top: 1.5em; margin-bottom: 0.5em; color: #2c3e50; }
+        p { margin-bottom: 1em; }
+        pre { background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 6px; padding: 15px; overflow-x: auto; margin: 1em 0; }
+        code { background: #f8f9fa; padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.9em; }
+        blockquote { border-left: 4px solid #3498db; margin: 1em 0; padding-left: 15px; color: #666; font-style: italic; }
+        table { width: 100%; border-collapse: collapse; margin: 1em 0; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background: #f8f9fa; font-weight: 600; }
+        ul, ol { margin: 1em 0; padding-left: 30px; }
+        li { margin-bottom: 0.5em; }
+        hr { border: none; border-top: 2px solid #eee; margin: 2em 0; }
         .placeholder-text { display: none; }
     </style>
 </head>
