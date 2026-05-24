@@ -49,11 +49,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (closeWelcomeBtn) {
-      closeWelcomeBtn.addEventListener("click", () => {
-        welcomeModal.style.display = "none";
-      });
+        closeWelcomeBtn.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            console.log('Botón de bienvenida clickeado');
+            welcomeModal.style.setProperty('display', 'none', 'important');
+        });
     }
-
     document.addEventListener(
       "touchstart",
       (e) => {
