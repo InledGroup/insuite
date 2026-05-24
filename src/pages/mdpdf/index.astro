@@ -76,6 +76,9 @@ import Layout from "../../layouts/LayoutEditors.astro";
                     <div class="header-name">
                         <h1 data-i18n="mdpdf.header">MDPDF</h1>
                     </div>
+                    <button class="btn mobile-toggle" id="btn-toggle-preview" style="display: none;">
+                        <i class="fa-solid fa-eye"></i>
+                    </button>
                     <div class="header-info">
                         <a href="https://github.com/Inled-Group/mdpdf">GitHub</a
                         >
@@ -88,7 +91,7 @@ import Layout from "../../layouts/LayoutEditors.astro";
                             <i class="fa-solid fa-file-pdf"></i><span data-i18n="mdpdf.export">Exportar a PDF</span>
                         </button>
                         <button class="btn" id="btn-example">
-                            <span data-i18n="mdpdf.example">Insertar ejemplo</span>
+                            <i class="fa-solid fa-file-lines"></i><span data-i18n="mdpdf.example">Insertar ejemplo</span>
                         </button>
                     </div>
                     <div class="ribbon-group">

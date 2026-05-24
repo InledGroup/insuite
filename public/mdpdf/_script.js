@@ -35,6 +35,46 @@ document.addEventListener('DOMContentLoaded', function () {
         // Actualizar vista previa inicial
         updatePreview();
         console.log('Editor inicializado correctamente');
+        
+        // Gestión de gestos táctiles y botón toggle
+        let touchStartX = 0;
+        const previewPanel = document.querySelector('.preview-panel');
+        const toggleBtn = document.getElementById('btn-toggle-preview');
+        console.log('Botón toggle encontrado:', !!toggleBtn);
+
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', (e) => {
+                console.log('Click detectado en el botón toggle');
+                previewPanel.classList.toggle('--visible');
+                showMobileHelp();
+            });
+        }
+
+        function showMobileHelp() {
+            if (previewPanel.classList.contains('--visible') && !localStorage.getItem('mobileHelpShown')) {
+                alert('¡Consejo móvil! Puedes deslizar de izquierda a derecha en cualquier lugar de la pantalla para cerrar la previsualización.');
+                localStorage.setItem('mobileHelpShown', 'true');
+            }
+        }
+
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, false);
+
+        document.addEventListener('touchend', e => {
+            let touchEndX = e.changedTouches[0].screenX;
+            handleSwipe(touchStartX, touchEndX);
+        }, false);
+
+        function handleSwipe(startX, endX) {
+            if (window.innerWidth > 768) return;
+            const diff = endX - startX;
+            if (diff < -50) { // Deslizamiento derecha a izquierda
+                previewPanel.classList.add('--visible');
+            } else if (diff > 50) { // Deslizamiento izquierda a derecha
+                previewPanel.classList.remove('--visible');
+            }
+        }
     } else {
         console.error('No se encontraron los elementos necesarios');
     }
