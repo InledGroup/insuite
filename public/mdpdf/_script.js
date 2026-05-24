@@ -2,141 +2,158 @@
 let markdownInput, preview, filenameInput, loading, wordCount;
 
 // Inicializar cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', function () {
-    console.log('DOM cargado, inicializando...');
+document.addEventListener("DOMContentLoaded", function () {
+  console.log("DOM cargado, inicializando...");
 
-    // Obtener elementos
-    markdownInput = document.getElementById('markdown-input');
-    preview = document.getElementById('preview');
-    filenameInput = document.getElementById('filename');
-    loading = document.getElementById('loading');
-    wordCount = document.getElementById('word-count');
+  // Obtener elementos
+  markdownInput = document.getElementById("markdown-input");
+  preview = document.getElementById("preview");
+  filenameInput = document.getElementById("filename");
+  loading = document.getElementById("loading");
+  wordCount = document.getElementById("word-count");
 
-    // Botones
-    const btnExport = document.getElementById('btn-export');
-    const btnExample = document.getElementById('btn-example');
-    const btnClear = document.getElementById('btn-clear');
+  // Botones
+  const btnExport = document.getElementById("btn-export");
+  const btnExample = document.getElementById("btn-example");
+  const btnClear = document.getElementById("btn-clear");
 
-    if (markdownInput && preview) {
-        console.log('Elementos encontrados, configurando eventos...');
+  if (markdownInput && preview) {
+    console.log("Elementos encontrados, configurando eventos...");
 
-        // Configurar eventos
-        markdownInput.addEventListener('input', updatePreview);
-        markdownInput.addEventListener('keyup', updatePreview);
-        markdownInput.addEventListener('paste', function () {
-            setTimeout(updatePreview, 10);
-        });
+    // Configurar eventos
+    markdownInput.addEventListener("input", updatePreview);
+    markdownInput.addEventListener("keyup", updatePreview);
+    markdownInput.addEventListener("paste", function () {
+      setTimeout(updatePreview, 10);
+    });
 
-        // Eventos de botones
-        if (btnExport) btnExport.addEventListener('click', downloadPDF);
-        if (btnExample) btnExample.addEventListener('click', insertExample);
-        if (btnClear) btnClear.addEventListener('click', clearEditor);
+    // Eventos de botones
+    if (btnExport) btnExport.addEventListener("click", downloadPDF);
+    if (btnExample) btnExample.addEventListener("click", insertExample);
+    if (btnClear) btnClear.addEventListener("click", clearEditor);
 
-        // Actualizar vista previa inicial
-        updatePreview();
-        console.log('Editor inicializado correctamente');
-        
-        // Gestión de gestos táctiles y botones toggle
-        const previewPanel = document.querySelector('.preview-panel');
-        const toggleBtn = document.getElementById('btn-toggle-preview');
-        const welcomeModal = document.getElementById('welcome-modal');
-        const closeWelcomeBtn = document.getElementById('btn-close-welcome');
+    // Actualizar vista previa inicial
+    updatePreview();
+    console.log("Editor inicializado correctamente");
 
-        if (toggleBtn) {
-            toggleBtn.addEventListener('click', () => {
-                previewPanel.classList.toggle('--visible');
-            });
-        }
+    // Gestión de gestos táctiles y botones toggle
+    const previewPanel = document.querySelector(".preview-panel");
+    const toggleBtn = document.getElementById("btn-toggle-preview");
+    const welcomeModal = document.getElementById("welcome-modal");
+    const closeWelcomeBtn = document.getElementById("btn-close-welcome");
 
-        if (closeWelcomeBtn) {
-            closeWelcomeBtn.addEventListener('click', () => {
-                welcomeModal.style.display = 'none';
-            });
-        }
-
-        document.addEventListener('touchstart', e => {
-            touchStartX = e.changedTouches[0].screenX;
-        }, false);
-
-        document.addEventListener('touchend', e => {
-            let touchEndX = e.changedTouches[0].screenX;
-            handleSwipe(touchStartX, touchEndX);
-        }, false);
-
-        function handleSwipe(startX, endX) {
-            if (window.innerWidth > 768) return;
-            const diff = endX - startX;
-            if (diff < -50) { // Deslizamiento derecha a izquierda
-                previewPanel.classList.add('--visible');
-            } else if (diff > 50) { // Deslizamiento izquierda a derecha
-                previewPanel.classList.remove('--visible');
-            }
-        }
-    } else {
-        console.error('No se encontraron los elementos necesarios');
+    if (toggleBtn) {
+      toggleBtn.addEventListener("click", () => {
+        previewPanel.classList.toggle("--visible");
+      });
     }
+
+    if (closeWelcomeBtn) {
+      closeWelcomeBtn.addEventListener("click", () => {
+        welcomeModal.style.display = "none";
+      });
+    }
+
+    document.addEventListener(
+      "touchstart",
+      (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      },
+      false,
+    );
+
+    document.addEventListener(
+      "touchend",
+      (e) => {
+        let touchEndX = e.changedTouches[0].screenX;
+        handleSwipe(touchStartX, touchEndX);
+      },
+      false,
+    );
+
+    function handleSwipe(startX, endX) {
+      if (window.innerWidth > 768) return;
+      const diff = endX - startX;
+      if (diff < -50) {
+        // Deslizamiento derecha a izquierda
+        previewPanel.classList.add("--visible");
+      } else if (diff > 50) {
+        // Deslizamiento izquierda a derecha
+        previewPanel.classList.remove("--visible");
+      }
+    }
+  } else {
+    console.error("No se encontraron los elementos necesarios");
+  }
 });
 
 // Función para actualizar la vista previa
 function updatePreview() {
-    if (!markdownInput || !preview) return;
+  if (!markdownInput || !preview) return;
 
-    const text = markdownInput.value;
+  const text = markdownInput.value;
 
-    // Si no hay texto, mostrar placeholder
-    if (!text.trim()) {
-        preview.innerHTML = '<div class="placeholder-text">Escribe algo en el editor para ver la vista previa...</div>';
-        if (wordCount) wordCount.textContent = '0 palabras';
-        return;
+  // Si no hay texto, mostrar placeholder
+  if (!text.trim()) {
+    preview.innerHTML =
+      '<div class="placeholder-text">Escribe algo en el editor para ver la vista previa...</div>';
+    if (wordCount) wordCount.textContent = "0 palabras";
+    return;
+  }
+
+  try {
+    // Convertir markdown a HTML
+    let html = marked.parse(text);
+
+    // Procesar fórmulas matemáticas
+    html = html.replace(/\$\$([\s\S]+?)\$\$/g, function (match, math) {
+      return '<div class="math-display">$$' + math + "$$</div>";
+    });
+
+    html = html.replace(/\$([^\$\n]+?)\$/g, function (match, math) {
+      return '<span class="math-inline">$' + math + "$</span>";
+    });
+
+    // Actualizar contenido
+    preview.innerHTML = html;
+
+    // Contar palabras
+    if (wordCount) {
+      const words = text
+        .trim()
+        .split(/\s+/)
+        .filter(function (word) {
+          return word.length > 0;
+        });
+      wordCount.textContent = words.length + " palabras";
     }
 
-    try {
-        // Convertir markdown a HTML
-        let html = marked.parse(text);
-
-        // Procesar fórmulas matemáticas
-        html = html.replace(/\$\$([\s\S]+?)\$\$/g, function (match, math) {
-            return '<div class="math-display">$$' + math + '$$</div>';
-        });
-
-        html = html.replace(/\$([^\$\n]+?)\$/g, function (match, math) {
-            return '<span class="math-inline">$' + math + '$</span>';
-        });
-
-        // Actualizar contenido
-        preview.innerHTML = html;
-
-        // Contar palabras
-        if (wordCount) {
-            const words = text.trim().split(/\s+/).filter(function (word) {
-                return word.length > 0;
-            });
-            wordCount.textContent = words.length + ' palabras';
-        }
-
-        // Renderizar matemáticas con MathJax
-        if (window.MathJax && window.MathJax.typesetPromise) {
-            window.MathJax.typesetPromise([preview]).catch(function (err) {
-                console.warn('Error renderizando matemáticas:', err);
-            });
-        }
-
-    } catch (error) {
-        console.error('Error actualizando vista previa:', error);
-        preview.innerHTML = '<div style="color: #e74c3c; padding: 20px;">Error renderizando el contenido. Verifica la sintaxis de Markdown.</div>';
+    // Renderizar matemáticas con MathJax
+    if (window.MathJax && window.MathJax.typesetPromise) {
+      window.MathJax.typesetPromise([preview]).catch(function (err) {
+        console.warn("Error renderizando matemáticas:", err);
+      });
     }
+  } catch (error) {
+    console.error("Error actualizando vista previa:", error);
+    preview.innerHTML =
+      '<div style="color: #e74c3c; padding: 20px;">Error renderizando el contenido. Verifica la sintaxis de Markdown.</div>';
+  }
 }
 
 // Función para insertar ejemplo
 function insertExample() {
-    if (!markdownInput) return;
+  if (!markdownInput) return;
 
-    const currentContent = markdownInput.value.trim();
-    if (currentContent && !confirm('¿Quieres reemplazar el contenido actual con el ejemplo?')) {
-        return;
-    }
+  const currentContent = markdownInput.value.trim();
+  if (
+    currentContent &&
+    !confirm("¿Quieres reemplazar el contenido actual con el ejemplo?")
+  ) {
+    return;
+  }
 
-    markdownInput.value = `# Guia Completa de Markdown
+  markdownInput.value = `# Guia Completa de Markdown
 
 ## Encabezados
 
@@ -209,7 +226,7 @@ print(factorial(5))
 ## Citas
 
 > Esta es una cita simple.
-> 
+>
 > Puede tener múltiples párrafos.
 
 > Esta es una cita con **texto en negrita** y *cursiva*.
@@ -307,43 +324,43 @@ Para mostrar caracteres literales:
 
 ¡Listo para generar tu PDF! 📄✨`;
 
-    updatePreview();
-    markdownInput.focus();
+  updatePreview();
+  markdownInput.focus();
 }
 
 // Función para limpiar editor
 function clearEditor() {
-    if (!markdownInput) return;
+  if (!markdownInput) return;
 
-    const hasContent = markdownInput.value.trim().length > 0;
+  const hasContent = markdownInput.value.trim().length > 0;
 
-    if (!hasContent || confirm('¿Seguro que quieres borrar todo el contenido?')) {
-        markdownInput.value = '';
-        updatePreview();
-        markdownInput.focus();
-    }
+  if (!hasContent || confirm("¿Seguro que quieres borrar todo el contenido?")) {
+    markdownInput.value = "";
+    updatePreview();
+    markdownInput.focus();
+  }
 }
 
 // Función para generar PDF
 function downloadPDF() {
-    if (!markdownInput || !markdownInput.value.trim()) {
-        alert('No hay contenido para convertir a PDF');
-        return;
-    }
+  if (!markdownInput || !markdownInput.value.trim()) {
+    alert("No hay contenido para convertir a PDF");
+    return;
+  }
 
-    const filename = (filenameInput?.value?.trim() || 'documento') + '.pdf';
+  const filename = (filenameInput?.value?.trim() || "documento") + ".pdf";
 
-    // Mostrar loading
-    if (loading) loading.style.display = 'flex';
+  // Mostrar loading
+  if (loading) loading.style.display = "flex";
 
-    // Crear contenido HTML para el PDF
-    const content = preview.innerHTML;
-    const printContent = `
+  // Crear contenido HTML para el PDF
+  const content = preview.innerHTML;
+  const printContent = `
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>PDF Document</title>
+    <title>Exported with Inled Insuite MDPDF</title>
     <style>
         body {
             font-family: 'Times New Roman', serif;
@@ -374,33 +391,33 @@ ${content}
 </body>
 </html>`;
 
-    // Crear ventana para imprimir
-    const printWindow = window.open('', '_blank');
-    printWindow.document.write(printContent);
-    printWindow.document.close();
+  // Crear ventana para imprimir
+  const printWindow = window.open("", "_blank");
+  printWindow.document.write(printContent);
+  printWindow.document.close();
 
-    printWindow.onload = function () {
-        setTimeout(function () {
-            printWindow.focus();
-            printWindow.print();
+  printWindow.onload = function () {
+    setTimeout(function () {
+      printWindow.focus();
+      printWindow.print();
 
-            // Ocultar loading después de un delay
-            setTimeout(function () {
-                if (loading) loading.style.display = 'none';
-                printWindow.close();
-            }, 1000);
-        }, 500);
-    };
+      // Ocultar loading después de un delay
+      setTimeout(function () {
+        if (loading) loading.style.display = "none";
+        printWindow.close();
+      }, 1000);
+    }, 500);
+  };
 }
 
 // Atajos de teclado
-document.addEventListener('keydown', function (e) {
-    if (e.ctrlKey && e.key === 's') {
-        e.preventDefault();
-        downloadPDF();
-    }
-    if (e.ctrlKey && e.key === 'e') {
-        e.preventDefault();
-        insertExample();
-    }
+document.addEventListener("keydown", function (e) {
+  if (e.ctrlKey && e.key === "s") {
+    e.preventDefault();
+    downloadPDF();
+  }
+  if (e.ctrlKey && e.key === "e") {
+    e.preventDefault();
+    insertExample();
+  }
 });
