@@ -94,7 +94,15 @@ import Layout from "../../layouts/LayoutEditors.astro";
                             <i class="fa-solid fa-file-lines"></i><span data-i18n="mdpdf.example">Insertar ejemplo</span>
                         </button>
                     </div>
+
+                    <a href="/apps" class="ribbon-logo">
+                        <img src="https://hosted.inled.es/insuite.svg" alt="Insuite" />
+                    </a>
+
                     <div class="ribbon-group">
+                        <button class="btn mobile-toggle" id="btn-toggle-preview">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
                         <button class="btn" id="btn-clear">
                             <i class="fa-solid fa-trash"></i><span data-i18n="mdpdf.clear_all">Limpiar todo</span>
                         </button>
@@ -106,33 +114,7 @@ import Layout from "../../layouts/LayoutEditors.astro";
                         <div class="panel-header" data-i18n="mdpdf.editor">Editor</div>
                         <textarea
                             id="markdown-input"
-                            placeholder="# Mi Documento
-
-Escribe aquí tu contenido en Markdown...
-
-## Matemáticas
-La famosa ecuación: $E = mc^2$
-
-$$\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}$$
-
-## Características
-- **Texto en negrita** y *cursiva*
-- Listas y enlaces
-- Código: `console.log('Hola')`
-- Fórmulas matemáticas
-
-```javascript
-function ejemplo() {
-    return 'Hola mundo';
-}
-```
-
-> Cita importante
-
-| Función | Derivada |
-|---------|----------|
-| $x^2$ | $2x$ |
-| $\sin x$ | $\cos x$ |"
+                            placeholder="# Mi Documento..."
                             data-i18n-placeholder="mdpdf.placeholder"
                         ></textarea>
                     </div>
@@ -140,6 +122,20 @@ function ejemplo() {
                     <div class="preview-panel">
                         <div class="panel-header" data-i18n="mdpdf.preview">Vista previa</div>
                         <div id="preview"></div>
+                        <div class="ribbon">
+                             <button class="btn mobile-toggle" id="btn-toggle-preview-close">
+                                <i class="fa-solid fa-eye-slash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Modal de Bienvenida -->
+                <div id="welcome-modal" class="loading" style="display: flex; background: rgba(0,0,0,0.8); z-index: 5000;">
+                    <div style="background: white; padding: 30px; border-radius: 10px; color: #333; max-width: 80%; text-align: center;">
+                        <h2>¡Bienvenido a MDPDF!</h2>
+                        <p>Convierte tus notas Markdown a PDF profesional.</p>
+                        <button class="btn btn-primary" id="btn-close-welcome" style="margin: 20px auto 0;">Empezar</button>
                     </div>
                 </div>
 
