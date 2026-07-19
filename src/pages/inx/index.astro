@@ -6,8 +6,8 @@ import { ExternalLink } from 'lucide-astro';
 ---
 
 <Layout
-  title="InX | Formateador de texto para X"
-  description="Formatea texto para X (Twitter) con IA y control de caracteres"
+  title="InX | Format your X post"
+  description="Format text for X or let your AI agent format it via URL"
   i18nTitle="inx.title"
 >
   <div class="app-container">
@@ -18,11 +18,6 @@ import { ExternalLink } from 'lucide-astro';
          <div class="brand">
              <h1 data-i18n="inx.header">InX</h1>
          </div>
-         <a href="https://edge.inled.es" target="_blank" class="ai-link" title="Ir a Inled AI" data-i18n-tooltip="ai.link">
-             <img src="https://hosted.inled.es/inledai.png" alt="Inled AI" />
-             <span class="ai-text" data-i18n="ai.title">Inled AI</span>
-             <ExternalLink class="icon-sm" />
-         </a>
       </header>
       
       <div class="content-wrapper">
@@ -43,9 +38,61 @@ import { ExternalLink } from 'lucide-astro';
                         <div class="doc-item"><code>[g]gothic[/g]</code> <span>&rarr;</span> <span style="font-family: serif;">Gothic</span></div>
                         <div class="doc-item"><code>[d]double[/d]</code> <span>&rarr;</span> <span style="font-family: serif; letter-spacing: 1px;">Dｏｕｂｌｅ</span></div>
                     </div>
+                    <button id="copySkillBtn" class="copy-skill-btn">Copy AI Skill</button>
                 </div>
             </details>
           </div>
+
+          <script is:inline>
+            document.getElementById('copySkillBtn')?.addEventListener('click', async () => {
+              const skill = `# Skill: Formatear posts para InX (X/Twitter) via URL
+
+Cuando el usuario te pida formatear un post para X/Twitter, genera un enlace usando la siguiente plantilla.
+
+## Base URL
+https://insuite.inled.es/inx/
+
+## Parámetro
+?t= followed by the formatted text using the syntax below.
+
+## Syntax
+
+| Format | Syntax | Example |
+|--------|--------|---------|
+| Bold | \`**text**\` | \`**Hola mundo**\` |
+| Italic | \`_text_\` | \`_Hola mundo_\` |
+| Underline | \`<u>text</u>\` | \`<u>Hola mundo</u>\` |
+| Strikethrough | \`~~text~~\` | \`~~Hola mundo~~\` |
+| Code | \\\`text\\\` | \\\`code example\\\` |
+| Script | \`[s]text[/s]\` | \`[s]Script[/s]\` |
+| Gothic | \`[g]text[/g]\` | \`[g]Gothic[/g]\` |
+| Double | \`[d]text[/d]\` | \`[d]Double[/d]\` |
+
+## URL Example
+\`\`\`
+https://insuite.inled.es/inx/?t=**Hola** _mundo_ [s]script[/s]
+\`\`\`
+
+## Instructions
+- Apply the formatting marks directly to the user's text.
+- Return the full URL ready to open in a browser.
+- When the text contains multiple formatting styles, combine them in a single ?t= parameter.
+- Do not URL-encode the formatting characters.`;
+
+              try {
+                await navigator.clipboard.writeText(skill);
+                const btn = document.getElementById('copySkillBtn');
+                btn.textContent = '¡Copiado!';
+                btn.classList.add('success');
+                setTimeout(() => {
+                  btn.textContent = 'Copiar skill para IA';
+                  btn.classList.remove('success');
+                }, 2000);
+              } catch (err) {
+                console.error('Error al copiar skill', err);
+              }
+            });
+          </script>
       </div>
 
       <footer class="footer">
@@ -218,6 +265,34 @@ import { ExternalLink } from 'lucide-astro';
 
   .doc-item span {
       color: #475569;
+  }
+
+  .copy-skill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background: #1e293b;
+      color: #94a3b8;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+  }
+
+  .copy-skill-btn:hover {
+      background: #334155;
+      color: #f8fafc;
+      border-color: #475569;
+  }
+
+  .copy-skill-btn.success {
+      border-color: #10b981;
+      color: #10b981;
   }
 
   /* Responsive Design */

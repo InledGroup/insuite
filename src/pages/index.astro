@@ -1,18 +1,195 @@
 ---
-import Layout from '../layouts/LayoutIndex.astro';
-import Header from '../components/Header.astro';
-import Hero from '../components/Hero.astro';
-import Features from '../components/Features.astro';
-import Products from '../components/Products.astro';
-import Footer from '../components/Footer.astro';
+import Sidebar from '../components/sidebar.astro';
+import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout i18nTitle="landing.title">
-  <Header />
-  <main>
-    <Hero />
-    <Features />
-    <Products />
-  </main>
-  <Footer />
+<Layout i18nTitle="apps.title">
+	<Sidebar />
+	<div class="main-content">
+
+		<section class="hero">
+			<div class="hero-inner">
+				<h1>InSuite</h1>
+				<p class="hero-sub">Herramientas de edición y formateo de texto en múltiples formatos.</p>
+				<p class="hero-sub2">Todo en el navegador, sin instalar nada.</p>
+				<a href="#apps" class="hero-cta">Ver herramientas</a>
+			</div>
+		</section>
+
+		<section class="apps-section" id="apps">
+			<div class="apps-grid">
+				<div class="app-card" onclick="openApp('MDPDF')">
+					<img src="https://hosted.inled.es/MDPDF.png" class="app-icon" alt="MDPDF" />
+					<div class="app-name">MDPDF</div>
+					<div class="app-desc" data-i18n="apps.mdpdf_desc">Edita y previsualiza markdown y expórtalo a PDF</div>
+				</div>
+				<div class="app-card" onclick="openApp('inlinked')">
+					<img src="https://hosted.inled.es/INLINKED.png" class="app-icon" alt="inLinked" />
+					<div class="app-name">inLinked</div>
+					<div class="app-desc" data-i18n="apps.inlinked_desc">Formatea texto para LinkedIN</div>
+				</div>
+				<div class="app-card" onclick="openApp('inx')">
+					<img src="https://hosted-inled-es.pages.dev/inx.png" class="app-icon" alt="InX" />
+					<div class="app-name">InX</div>
+					<div class="app-desc" data-i18n="apps.inx_desc">Formatea texto para X / Twitter con IA</div>
+				</div>
+				<div class="app-card" onclick="openApp('inmd')">
+					<img src="https://hosted.inled.es/inMD.png" class="app-icon" alt="inMD" />
+					<div class="app-name">inMD</div>
+					<div class="app-desc" data-i18n="apps.inmd_desc">Edita markdown sin ver código</div>
+				</div>
+				<div class="app-card" onclick="openApp('indoc')">
+					<img src="https://hosted.inled.es/INDOC.png" class="app-icon" alt="inDOC" />
+					<div class="app-name">inDOC</div>
+					<div class="app-desc" data-i18n="apps.indoc_desc">Edita texto enriquecido online</div>
+				</div>
+				<div class="app-card" onclick="openApp('inqr')">
+					<img src="https://hosted.inled.es/inqr.png" class="app-icon" alt="inQR" />
+					<div class="app-name">inQR</div>
+					<div class="app-desc" data-i18n="apps.inqr_desc">Crea códigos QR para webs, wifi y códigos de barras</div>
+				</div>
+			</div>
+
+			<div class="extra-title" data-i18n="apps.utils_title">También te puede interesar</div>
+			<div class="extra-grid">
+				<div class="app-card" onclick="openApp('mypdf')">
+					<div class="app-name">MyPDF</div>
+					<div class="app-desc">Herramientas de PDF 100% privadas.</div>
+				</div>
+				<div class="app-card" onclick="openApp('office')">
+					<div class="app-name">Insuite Office</div>
+					<div class="app-desc">Compatible con formatos de Microsoft, en el navegador.</div>
+				</div>
+				<div class="app-card" onclick="openApp('inled')">
+					<div class="app-name">Descubre más</div>
+					<div class="app-desc">Más proyectos y aplicaciones de Inled.</div>
+				</div>
+			</div>
+		</section>
+
+	</div>
 </Layout>
+
+<style>
+	.hero {
+		min-height: 100vh;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		padding: 48px 24px;
+	}
+
+	.hero-inner {
+		max-width: 640px;
+	}
+
+	.hero h1 {
+		font-size: 5rem;
+		font-weight: 700;
+		letter-spacing: -0.04em;
+		margin-bottom: 16px;
+	}
+
+	.hero-sub {
+		font-size: 1.25rem;
+		color: #a1a1a1;
+		line-height: 1.5;
+		margin-bottom: 8px;
+	}
+
+	.hero-sub2 {
+		font-size: 1.1rem;
+		color: #666;
+		margin-bottom: 40px;
+	}
+
+	.hero-cta {
+		display: inline-block;
+		padding: 12px 32px;
+		background: #fff;
+		color: #111;
+		border-radius: 8px;
+		text-decoration: none;
+		font-weight: 600;
+		font-size: 0.95rem;
+		transition: background 0.2s;
+	}
+
+	.hero-cta:hover {
+		background: #e5e5e5;
+	}
+
+	.apps-section {
+		padding: 0 24px 80px;
+		max-width: 900px;
+		margin: 0 auto;
+	}
+
+	.apps-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 12px;
+		margin-bottom: 48px;
+	}
+
+	.app-card {
+		background: #1a1a1a;
+		border: 1px solid #2a2a2a;
+		border-radius: 12px;
+		padding: 24px;
+		cursor: pointer;
+		transition: border-color 0.2s;
+		box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4), inset 0 -1px 2px rgba(255, 255, 255, 0.03);
+	}
+
+	.app-card:hover {
+		border-color: #444 !important;
+		background: #1a1a1a !important;
+		transform: none !important;
+	}
+
+	.app-icon {
+		width: 40px;
+		height: 40px;
+		margin-bottom: 12px;
+	}
+
+	.app-name {
+		font-size: 1.1rem;
+		font-weight: 600;
+		margin-bottom: 6px;
+	}
+
+	.app-desc {
+		font-size: 0.85rem;
+		color: #888;
+		line-height: 1.4;
+	}
+
+	.extra-title {
+		font-size: 0.85rem;
+		font-weight: 600;
+		color: #555;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		margin-bottom: 16px;
+	}
+
+	.extra-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 12px;
+	}
+
+	@media (max-width: 700px) {
+		.hero h1 {
+			font-size: 3rem;
+		}
+
+		.apps-grid,
+		.extra-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

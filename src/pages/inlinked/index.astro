@@ -43,9 +43,61 @@ import { ExternalLink } from 'lucide-astro';
                         <div class="doc-item"><code>[g]gothic[/g]</code> <span>&rarr;</span> <span style="font-family: serif;">Gothic</span></div>
                         <div class="doc-item"><code>[d]double[/d]</code> <span>&rarr;</span> <span style="font-family: serif; letter-spacing: 1px;">Dｏｕｂｌｅ</span></div>
                     </div>
+                    <button id="copySkillBtn" class="copy-skill-btn">Copy AI skill</button>
                 </div>
             </details>
           </div>
+
+          <script is:inline>
+            document.getElementById('copySkillBtn')?.addEventListener('click', async () => {
+              const skill = `# Skill: Formatear posts para InLinked (LinkedIn) via URL
+
+Cuando el usuario te pida formatear un post para LinkedIn, genera un enlace usando la siguiente plantilla.
+
+## Base URL
+https://insuite.inled.es/inlinked/
+
+## Parámetro
+?t= followed by the formatted text using the syntax below.
+
+## Syntax
+
+| Format | Syntax | Example |
+|--------|--------|---------|
+| Bold | \`**text**\` | \`**Hola mundo**\` |
+| Italic | \`_text_\` | \`_Hola mundo_\` |
+| Underline | \`<u>text</u>\` | \`<u>Hola mundo</u>\` |
+| Strikethrough | \`~~text~~\` | \`~~Hola mundo~~\` |
+| Code | \\\`text\\\` | \\\`code example\\\` |
+| Script | \`[s]text[/s]\` | \`[s]Script[/s]\` |
+| Gothic | \`[g]text[/g]\` | \`[g]Gothic[/g]\` |
+| Double | \`[d]text[/d]\` | \`[d]Double[/d]\` |
+
+## URL Example
+\`\`\`
+https://insuite.inled.es/inlinked/?t=**Hola** _mundo_ [s]script[/s]
+\`\`\`
+
+## Instructions
+- Apply the formatting marks directly to the user's text.
+- Return the full URL ready to open in a browser.
+- When the text contains multiple formatting styles, combine them in a single ?t= parameter.
+- Do not URL-encode the formatting characters.`;
+
+              try {
+                await navigator.clipboard.writeText(skill);
+                const btn = document.getElementById('copySkillBtn');
+                btn.textContent = '¡Copiado!';
+                btn.classList.add('success');
+                setTimeout(() => {
+                  btn.textContent = 'Copiar skill para IA';
+                  btn.classList.remove('success');
+                }, 2000);
+              } catch (err) {
+                console.error('Error al copiar skill', err);
+              }
+            });
+          </script>
       </div>
 
       <footer class="footer">
@@ -217,6 +269,34 @@ import { ExternalLink } from 'lucide-astro';
 
   .doc-item span {
       color: #94a3b8;
+  }
+
+  .copy-skill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background: #f8fafc;
+      color: #475569;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+  }
+
+  .copy-skill-btn:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+      border-color: #cbd5e1;
+  }
+
+  .copy-skill-btn.success {
+      border-color: #10b981;
+      color: #10b981;
   }
 
   /* Responsive Design */
