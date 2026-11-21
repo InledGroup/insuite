@@ -18,6 +18,19 @@ const { locale } = Astro.props;
 const c = INSUITE_COPY[locale];
 const office = officeHome(locale);
 
+const apps = [
+  {
+    href: 'https://mypdf.inled.es',
+    logo: 'https://hosted.inled.es/cdn/MYPDF.png',
+    ...c.apps.mypdf,
+  },
+  {
+    href: 'https://mymetadata.inled.es',
+    logo: 'https://hosted.inled.es/cdn/mymetadata.svg',
+    ...c.apps.mymetadata,
+  },
+];
+
 const products = [
   { href: officeEditor(locale, '?new=docx'), icon: '/img/office/word.svg', name: c.products.word, hint: c.products.wordHint },
   { href: officeEditor(locale, '?new=xlsx'), icon: '/img/office/excel.svg', name: c.products.excel, hint: c.products.excelHint },
@@ -133,6 +146,28 @@ const products = [
             <span class="is-product-hint">{editor.desc}</span>
           </span>
           <span class="is-product-arrow" aria-hidden="true">›</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="is-section" id="apps" aria-labelledby="is-apps-title">
+    <div class="is-section-head">
+      <h2 id="is-apps-title">{c.apps.title}</h2>
+      <p>{c.apps.sub}</p>
+    </div>
+
+    <div class="is-apps">
+      {apps.map((app) => (
+        <a class="is-app" href={app.href} rel="noopener" target="_blank">
+          <img src={app.logo} alt="" width="48" height="48" decoding="async" loading="lazy" />
+          <span class="is-app-body">
+            <span class="is-app-head">
+              <span class="is-app-name">{app.name}</span>
+              <span class="is-app-domain">{app.domain}</span>
+            </span>
+            <span class="is-app-hint">{app.hint}</span>
+          </span>
         </a>
       ))}
     </div>

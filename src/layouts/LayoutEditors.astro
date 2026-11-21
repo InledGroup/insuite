@@ -1,6 +1,4 @@
 ---
-import Sub from '../components/Sub.astro';
-
 interface Props {
   title?: string;
   description?: string;
@@ -51,12 +49,8 @@ const { title = "Insuite Editors", description = "Herramientas de edición", i18
             }
         </script>
         <slot />
-        <div id="sub-wrapper">
-            <Sub />
-        </div>
         <style is:global>
             /* Edge AI Global Mode Styles */
-            .edge-ai-mode #sub-wrapper,
             .edge-ai-mode .sidebar,
             .edge-ai-mode .top-bar,
             .edge-ai-mode header,

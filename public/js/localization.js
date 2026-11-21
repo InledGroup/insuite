@@ -106,17 +106,6 @@ const translations = {
         "feat.md_editor": "Editor de markdown integrado",
         "feat.local_proc": "Procesamiento local sin subir a la nube",
 
-        // Sub (Newsletter)
-        "sub.validation_error": "No hemos podido validar su suscripción.",
-        "sub.success": "Se ha realizado su suscripción.",
-        "sub.title": "Buenas!",
-        "sub.text1": "Ofrecemos la InSuite de manera gratuita y sin anuncios. A cambio, nos haría ilusión que te suscribieras a nuestra newsletter.",
-        "sub.text2": "No mandamos spam, solamente recibirás novedades e innovaciones importantes.",
-        "sub.label": "Déjanos tu email y descubre novedades antes que nadie",
-        "sub.placeholder": "Tu mejor email...",
-        "sub.button": "SUSCRIBIRSE",
-        "sub.close": "Cerrar",
-
         // Apps Page
         "apps.title": "Aplicaciones",
         "apps.mdpdf_desc": "Edita y previsualiza markdown y expórtalo a PDF",
@@ -419,17 +408,6 @@ const translations = {
         "feat.docx_compat": "DOCX files compatible with Word and OnlyOffice",
         "feat.md_editor": "Integrated markdown editor",
         "feat.local_proc": "Local processing without uploading to cloud",
-
-        // Sub (Newsletter)
-        "sub.validation_error": "We could not validate your subscription.",
-        "sub.success": "Your subscription has been completed.",
-        "sub.title": "Hello!",
-        "sub.text1": "We offer InSuite for free and without ads. In exchange, we would love for you to subscribe to our newsletter.",
-        "sub.text2": "We don't send spam, you will only receive important news and innovations.",
-        "sub.label": "Leave us your email and discover news before anyone else",
-        "sub.placeholder": "Your best email...",
-        "sub.button": "SUBSCRIBE",
-        "sub.close": "Close",
 
         // Apps Page
         "apps.title": "Applications",

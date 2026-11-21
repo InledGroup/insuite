@@ -572,6 +572,74 @@ img {
   border-radius: 6px;
 }
 
+/* ---- the sibling apps ---- */
+
+.is-apps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.is-app {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  box-shadow: var(--shadow-1);
+  color: var(--ink);
+  transition:
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    transform 140ms ease;
+}
+
+.is-app:hover {
+  border-color: #c7d9ea;
+  box-shadow: var(--shadow-2);
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
+.is-app img {
+  width: 48px;
+  height: 48px;
+  flex: none;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.is-app-body {
+  min-width: 0;
+}
+
+.is-app-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.is-app-name {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.is-app-domain {
+  color: var(--ink-4);
+  font-size: 12px;
+}
+
+.is-app-hint {
+  display: block;
+  color: var(--ink-3);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
 /* ---- why ---- */
 
 .is-points {
@@ -765,7 +833,8 @@ img {
 
   .is-products,
   .is-legacy-grid,
-  .is-points {
+  .is-points,
+  .is-apps {
     grid-template-columns: 1fr;
   }
 

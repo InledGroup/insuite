@@ -1,5 +1,4 @@
 ---
-import Sub from '../components/Sub.astro';
 interface Props {
   i18nTitle?: string;
 }
@@ -27,6 +26,5 @@ const { i18nTitle } = Astro.props;
     </head>
     <body data-i18n-title={i18nTitle}>
         <slot />
-        <Sub />
     </body>
 </html>

@@ -102,6 +102,9 @@ function openApp(appName) {
       // Replace with the actual URL for Start
       url = "https://mypdf.inled.es/";
       break;
+    case "mymetadata":
+      url = "https://mymetadata.inled.es/";
+      break;
     case "office":
       // Replace with the actual URL for Start Omnibox
       url = "https://office.inled.es/"; // Example for a browser extension

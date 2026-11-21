@@ -60,6 +60,20 @@ const en = {
     body: 'Save your forms? Use iccount! It\'s optional :)',
     cta: 'Go to iccount.inled.es',
   },
+  apps: {
+    title: 'More from InSuite',
+    sub: 'Separate apps, same rule: nothing leaves your device.',
+    mypdf: {
+      name: 'MyPDF',
+      domain: 'mypdf.inled.es',
+      hint: 'Merge, split, rotate, OCR and protect PDFs, entirely in the browser.',
+    },
+    mymetadata: {
+      name: 'MyMetadata',
+      domain: 'mymetadata.inled.es',
+      hint: 'See and erase EXIF, GPS, authorship and AI marks in photos, PDF and Office files.',
+    },
+  },
   editors: {
     title: 'The specific editors',
     sub: 'Single-purpose tools for the rest of the day.',
@@ -156,6 +170,20 @@ const es: typeof en = {
     title: 'Una cuenta, todo Inled',
     body: 'Guardar tus formularios? Usa iccount! Es opcional :)',
     cta: 'Ir a iccount.inled.es',
+  },
+  apps: {
+    title: 'Más de InSuite',
+    sub: 'Apps aparte, la misma regla: nada sale de tu dispositivo.',
+    mypdf: {
+      name: 'MyPDF',
+      domain: 'mypdf.inled.es',
+      hint: 'Unir, dividir, girar, OCR y proteger PDF, todo dentro del navegador.',
+    },
+    mymetadata: {
+      name: 'MyMetadata',
+      domain: 'mymetadata.inled.es',
+      hint: 'Ver y borrar EXIF, GPS, autoría y marcas de IA en fotos, PDF y archivos de Office.',
+    },
   },
   editors: {
     title: 'Los editores específicos',
