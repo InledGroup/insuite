@@ -1,18 +1,18 @@
 :root {
-    --primary-color: linear-gradient(135deg, #63f364 0%, #1ce420 100%);
-    --primary-hover: #1ce420;
+    --primary-color: #0f6cbd;
+    --primary-hover: #115ea3;
     --secondary-color: #f3f2f1;
-    --border-color: #d1d1d1;
-    --text-color: #323130;
+    --border-color: #e1dfdd;
+    --text-color: #201f1e;
     --text-light: #605e5c;
     --bg-color: #ffffff;
     --panel-bg: #faf9f8;
-    --shadow: 0 2px 4px rgba(0,0,0,0.1);
-    --shadow-hover: 0 4px 8px rgba(0,0,0,0.15);
+    --shadow: 0 1px 2px rgba(0,0,0,0.08);
+    --shadow-hover: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 body {
-    font-family: 'Ubuntu', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: var(--office-font, 'Segoe UI', sans-serif);
     background-color: var(--panel-bg);
     color: var(--text-color);
     overflow: hidden;
@@ -159,8 +159,9 @@ body:not(.chat-open) .app-container {
 }
 
 .message.assistant {
-    background: var(--primary-color);
-    color: white;
+    background: var(--accent-soft, #ebf3fa);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
     align-self: flex-start;
     border-bottom-left-radius: 4px;
 }
@@ -219,7 +220,7 @@ body:not(.chat-open) .app-container {
 
 .chat-btn:hover:not(:disabled) {
     background: var(--secondary-color);
-    border-color: var(--primary-color);
+    border-color: var(--border-color);
 }
 
 .chat-btn.primary {
@@ -321,12 +322,6 @@ body:not(.chat-open) .app-container {
     .toolbar-btn {
         padding: 8px;
     }
-}
-
-/* Mejoras visuales adicionales */
-.chat-panel {
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
 }
 
 /* Animación de entrada */

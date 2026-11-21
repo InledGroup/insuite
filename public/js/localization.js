@@ -121,7 +121,7 @@ const translations = {
         "apps.title": "Aplicaciones",
         "apps.mdpdf_desc": "Edita y previsualiza markdown y expórtalo a PDF",
         "apps.inlinked_desc": "Formatea texto para LinkedIN",
-        "apps.inx_desc": "Formatea texto para X / Twitter con IA",
+        "apps.inx_desc": "Formatea texto para X / Twitter",
         "apps.inmd_desc": "Edita markdown como si estuvieras en Word, sin ver código",
         "apps.indoc_desc": "Edita texto enriquecido online",
         "apps.inqr_desc": "crea códigos QR para webs, redes wifi y códigos de barras",
@@ -133,15 +133,15 @@ const translations = {
         "apps.matrix_desc": "Simulaciones web de los programas que aparecen en la trilogía de Matrix",
 
         // InDoc
-        "indoc.title": "InDoc - Edita texto con IA gratuitamente",
-        "indoc.desc": "Editor de texto con IA integrada gratuito, privado y open-source",
-        "indoc.header": "InDoc | Editor de texto gratuito con IA",
+        "indoc.title": "InDoc - Edita texto gratuitamente",
+        "indoc.desc": "Editor de texto gratuito, privado y open-source",
+        "indoc.header": "InDoc | Editor de texto gratuito",
         "indoc.new": "Nuevo",
         "indoc.open": "Abrir",
         "indoc.save": "Guardar",
         "indoc.pdf": "PDF",
         "indoc.txt": "TXT",
-        "indoc.placeholder": "Comienza a escribir aquí con la ayuda de la IA. :)",
+        "indoc.placeholder": "Comienza a escribir aquí. :)",
         "indoc.confirm_new": "Revisa antes si has guardado los cambios por que al abrir un nuevo documento se perderán.",
         "indoc.prompt_name": "Nombre del documento:",
         "indoc.doc_saved": "Documento guardado correctamente",
@@ -192,7 +192,7 @@ const translations = {
 
         // InLinked
         "inlinked.title": "Inlinked | Formateador de texto para LinkedIN",
-        "inlinked.desc": "Formatea texto para LinkedIN con IA",
+        "inlinked.desc": "Formatea texto para LinkedIN",
         "inlinked.header": "Inlinked",
         "inlinked.format_group": "Formato",
         "inlinked.linkedin_group": "Estilos LinkedIn",
@@ -237,7 +237,7 @@ const translations = {
         "inqr.no_code_title": "No hay código aún",
         "inqr.no_code_desc": "Selecciona un tipo y genera tu código",
         "inqr.encoded_data": "Datos codificados:",
-        "inqr.footer": "Genera códigos QR gratuitamente · No recopilamos tus datos",
+        "inqr.footer": "Genera códigos QR gratuitamente · Todo ocurre en tu navegador",
 
         // InQR JS
         "inqr.toast_copied": "Texto copiado al portapapeles",
@@ -251,6 +251,7 @@ const translations = {
         "inqr.toast_success_barcode": "¡Código de barras generado correctamente!",
         "inqr.toast_success_qr": "¡Código QR generado correctamente!",
         "inqr.toast_error_download": "Error al descargar. Haz clic derecho en el código y pulsa en Guardar imagen como...",
+        "inqr.toast_error_generate": "No se pudo generar el código. Inténtalo de nuevo.",
         "inqr.toast_success_download": "El código se ha descargado correctamente",
         "inqr.title_text": "Tu Código QR",
         "inqr.title_wifi": "Tu Código QR WiFi",
@@ -303,7 +304,7 @@ const translations = {
 
         // InX
         "inx.title": "InX | Formateador de texto para X / Twitter",
-        "inx.desc": "Formatea texto para X (Twitter) con IA y control de caracteres",
+        "inx.desc": "Formatea texto para X (Twitter) con control de caracteres",
         "inx.header": "InX",
         "inx.placeholder": "¿Qué está pasando?",
         "inx.pro_user": "Usuario Pro",
@@ -434,7 +435,7 @@ const translations = {
         "apps.title": "Applications",
         "apps.mdpdf_desc": "Edit and preview markdown and export to PDF",
         "apps.inlinked_desc": "Format text for LinkedIn",
-        "apps.inx_desc": "Format text for X / Twitter with AI",
+        "apps.inx_desc": "Format text for X / Twitter",
         "apps.inmd_desc": "Edit markdown as if in Word, without seeing code",
         "apps.indoc_desc": "Edit rich text online",
         "apps.inqr_desc": "Create QR codes for webs, wifi networks and barcodes",
@@ -446,15 +447,15 @@ const translations = {
         "apps.matrix_desc": "Web simulations of programs appearing in the Matrix trilogy",
 
         // InDoc
-        "indoc.title": "InDoc - Edit text with AI for free",
-        "indoc.desc": "Free, private, open-source AI-integrated text editor",
-        "indoc.header": "InDoc | Free AI Text Editor",
+        "indoc.title": "InDoc - Edit text for free",
+        "indoc.desc": "Free, private, open-source text editor",
+        "indoc.header": "InDoc | Free Text Editor",
         "indoc.new": "New",
         "indoc.open": "Open",
         "indoc.save": "Save",
         "indoc.pdf": "PDF",
         "indoc.txt": "TXT",
-        "indoc.placeholder": "Start writing here with AI help. :)",
+        "indoc.placeholder": "Start writing here. :)",
         "indoc.confirm_new": "Check if you have saved changes because opening a new document will lose them.",
         "indoc.prompt_name": "Document Name:",
         "indoc.doc_saved": "Document saved successfully",
@@ -505,7 +506,7 @@ const translations = {
 
         // InLinked
         "inlinked.title": "Inlinked | Text Formatter for LinkedIn",
-        "inlinked.desc": "Format text for LinkedIn with AI",
+        "inlinked.desc": "Format text for LinkedIn",
         "inlinked.header": "Inlinked",
         "inlinked.format_group": "Format",
         "inlinked.linkedin_group": "LinkedIn Styles",
@@ -550,7 +551,7 @@ const translations = {
         "inqr.no_code_title": "No code yet",
         "inqr.no_code_desc": "Select a type and generate your code",
         "inqr.encoded_data": "Encoded Data:",
-        "inqr.footer": "Generate QR codes for free · We do not collect your data",
+        "inqr.footer": "Generate QR codes for free · Everything runs in your browser",
         
         // InQR JS
         "inqr.toast_copied": "Text copied to clipboard",
@@ -564,6 +565,7 @@ const translations = {
         "inqr.toast_success_barcode": "Barcode generated successfully!",
         "inqr.toast_success_qr": "QR code generated successfully!",
         "inqr.toast_error_download": "Error downloading. Right click code and Save Image As...",
+        "inqr.toast_error_generate": "Could not generate the code. Please try again.",
         "inqr.toast_success_download": "Code downloaded successfully",
         "inqr.title_text": "Your QR Code",
         "inqr.title_wifi": "Your WiFi QR Code",
@@ -616,7 +618,7 @@ const translations = {
 
         // InX
         "inx.title": "InX | Text Formatter for X / Twitter",
-        "inx.desc": "Format text for X (Twitter) with AI and character control",
+        "inx.desc": "Format text for X (Twitter) with character control",
         "inx.header": "InX",
         "inx.placeholder": "What's happening?",
         "inx.pro_user": "Pro User",

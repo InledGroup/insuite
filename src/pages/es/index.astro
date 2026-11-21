@@ -1,0 +1,11 @@
+---
+import InSuiteLanding from '../../components/InSuiteLanding.astro';
+import LayoutInSuite from '../../layouts/LayoutInSuite.astro';
+import { INSUITE_COPY } from '../../data/insuite';
+
+const copy = INSUITE_COPY.es;
+---
+
+<LayoutInSuite lang="es" title={copy.meta.title} description={copy.meta.description} path="/es/">
+	<InSuiteLanding locale="es" />
+</LayoutInSuite>

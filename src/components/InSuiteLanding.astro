@@ -1,0 +1,237 @@
+---
+import {
+  INSUITE_COPY,
+  ICCOUNT_LOGO,
+  INLED_LOGO,
+  OFFICE_LOGO,
+  landingPath,
+  officeEditor,
+  officeHome,
+  type InSuiteLocale,
+} from '../data/insuite';
+
+export interface Props {
+  locale: InSuiteLocale;
+}
+
+const { locale } = Astro.props;
+const c = INSUITE_COPY[locale];
+const office = officeHome(locale);
+
+const products = [
+  { href: officeEditor(locale, '?new=docx'), icon: '/img/office/word.svg', name: c.products.word, hint: c.products.wordHint },
+  { href: officeEditor(locale, '?new=xlsx'), icon: '/img/office/excel.svg', name: c.products.excel, hint: c.products.excelHint },
+  {
+    href: officeEditor(locale, '?new=pptx'),
+    icon: '/img/office/powerpoint.svg',
+    name: c.products.powerpoint,
+    hint: c.products.powerpointHint,
+  },
+  { href: 'https://forms.inled.es', icon: '/img/office/forms.svg', name: c.products.forms, hint: c.products.formsHint },
+  { href: officeEditor(locale, '?open=local'), icon: '/img/office/pdf.svg', name: c.products.pdf, hint: c.products.pdfHint },
+];
+
+---
+
+<header class="is-bar">
+  <div class="is-bar-inner">
+    <a class="is-brand" href={landingPath(locale)}>
+      <img src={OFFICE_LOGO} alt="" width="28" height="28" decoding="async" />
+      <span class="is-brand-text">
+        <span class="is-brand-name">InSuite</span>
+        <span class="is-brand-tag">{c.hero.eyebrow}</span>
+      </span>
+    </a>
+
+    <nav class="is-nav" aria-label={locale === 'es' ? 'Principal' : 'Main'}>
+      <a href="#office">{c.nav.office}</a>
+      <a href="#editors">{c.nav.editors}</a>
+      <a href="/apps">{c.nav.apps}</a>
+      <a href="https://inled.es" rel="noopener" target="_blank">{c.nav.inled}</a>
+    </nav>
+
+    <div class="is-end">
+      <div class="is-lang" role="group" aria-label={locale === 'es' ? 'Idioma' : 'Language'}>
+        <a href="/" data-set-lang="en" aria-current={locale === 'en' ? 'true' : undefined}>EN</a>
+        <a href="/es/" data-set-lang="es" aria-current={locale === 'es' ? 'true' : undefined}>ES</a>
+      </div>
+      <a class="is-btn is-btn-primary is-btn-sm" href={office} rel="noopener" target="_blank">{c.nav.cta}</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="is-hero">
+    <div class="is-hero-inner">
+      <div class="is-hero-copy">
+        <h1>{c.hero.title}</h1>
+        <p class="is-lede">{c.hero.lede}</p>
+        <div class="is-actions">
+          <a class="is-btn is-btn-primary is-btn-lg" href={office} rel="noopener" target="_blank">{c.hero.primary}</a>
+          <a class="is-btn is-btn-lg" href="#editors">{c.hero.secondary}</a>
+        </div>
+        <p class="is-note">{c.hero.note}</p>
+      </div>
+
+      <div class="is-hero-art" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <section class="is-section" id="office" aria-labelledby="is-office-title">
+    <div class="is-section-head">
+      <h2 id="is-office-title">{c.office.title}</h2>
+      <p>{c.office.sub}</p>
+    </div>
+
+    <a class="is-office-lead" href={office} rel="noopener" target="_blank">
+      <img src={OFFICE_LOGO} alt="" width="40" height="40" decoding="async" />
+      <span class="is-office-lead-body">
+        <span class="is-office-lead-name">{c.office.leadName}</span>
+        <span class="is-office-lead-hint">{c.office.leadHint}</span>
+      </span>
+      <span class="is-office-lead-cta">{c.office.leadCta} →</span>
+    </a>
+
+    <div class="is-products">
+      {products.map((product) => (
+        <a class="is-product" href={product.href} rel="noopener" target="_blank">
+          <img src={product.icon} alt="" width="40" height="40" decoding="async" />
+          <span class="is-product-body">
+            <span class="is-product-name">{product.name}</span>
+            <span class="is-product-hint">{product.hint}</span>
+          </span>
+          <span class="is-product-arrow" aria-hidden="true">›</span>
+        </a>
+      ))}
+    </div>
+
+    <a class="is-account" href="https://iccount.inled.es" rel="noopener" target="_blank">
+      <img src={ICCOUNT_LOGO} alt="iccount" width="44" height="44" decoding="async" />
+      <span class="is-account-body">
+        <span class="is-account-kicker">{c.account.name}</span>
+        <span class="is-account-title">{c.account.title}</span>
+        <span class="is-account-text">{c.account.body}</span>
+      </span>
+      <span class="is-btn">{c.account.cta} →</span>
+    </a>
+  </section>
+
+  <section class="is-section" id="editors" aria-labelledby="is-editors-title">
+    <div class="is-section-head">
+      <h2 id="is-editors-title">{c.editors.title}</h2>
+      <p>{c.editors.sub}</p>
+    </div>
+
+   
+
+    <div class="is-legacy-grid">
+      {c.legacy.map((editor) => (
+        <a class="is-legacy" href={editor.href}>
+          <img src={editor.icon} alt="" width="34" height="34" decoding="async" />
+          <span class="is-product-body">
+            <span class="is-product-name">{editor.name}</span>
+            <span class="is-product-hint">{editor.desc}</span>
+          </span>
+          <span class="is-product-arrow" aria-hidden="true">›</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="is-section" aria-labelledby="is-why-title">
+    <div class="is-section-head">
+      <h2 id="is-why-title">{c.why.title}</h2>
+    </div>
+    <div class="is-points">
+      {c.why.points.map((point, index) => (
+        <article class="is-point">
+          <span class="is-point-icon">
+            {index === 0 && (
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                <rect x="4.5" y="10.5" width="15" height="10" rx="2"></rect>
+                <path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"></path>
+              </svg>
+            )}
+            {index === 1 && (
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                <path d="m8.5 7.5-4.5 4.5 4.5 4.5M15.5 7.5l4.5 4.5-4.5 4.5"></path>
+              </svg>
+            )}
+            {index === 2 && (
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                <circle cx="12" cy="8" r="3.5"></circle>
+                <path d="M5 20a7 7 0 0 1 14 0"></path>
+              </svg>
+            )}
+          </span>
+          <h3>{point.title}</h3>
+          <p>{point.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</main>
+
+<footer class="is-foot">
+  <div class="is-foot-inner">
+    <div class="is-foot-top">
+      <div class="is-foot-brand">
+        <a class="is-brand" href={landingPath(locale)}>
+          <img src={OFFICE_LOGO} alt="" width="32" height="32" decoding="async" />
+          <span class="is-brand-name">InSuite</span>
+        </a>
+        <p class="is-foot-tagline">{c.footer.tagline}</p>
+        <p class="is-made-by">
+          <img src={INLED_LOGO} alt="Inled" height="18" decoding="async" />
+          <span>{c.footer.inledProduct}</span>
+        </p>
+      </div>
+
+      <div class="is-foot-col">
+        <h4>{c.footer.suite}</h4>
+        <ul>
+          <li><a href={office} rel="noopener" target="_blank">{c.footer.office}</a></li>
+          <li><a href="https://forms.inled.es" rel="noopener" target="_blank">{c.footer.forms}</a></li>
+          <li><a href="https://iccount.inled.es" rel="noopener" target="_blank">{c.footer.account}</a></li>
+          <li><a href="/apps">{c.footer.allApps}</a></li>
+        </ul>
+      </div>
+
+      <div class="is-foot-col">
+        <h4>{c.footer.editors}</h4>
+        <ul>
+          {c.legacy.map((editor) => (
+            <li><a href={editor.href}>{editor.name}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="is-foot-col">
+        <h4>{c.footer.inled}</h4>
+        <ul>
+          <li><a href="https://inled.es" rel="noopener" target="_blank">{c.footer.site}</a></li>
+          <li><a href="https://help.inled.es" rel="noopener" target="_blank">{c.footer.help}</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="is-foot-bottom">
+      <span>{c.footer.rights}</span>
+      <nav class="is-legal" aria-label={locale === 'es' ? 'Legal' : 'Legal'}>
+        <a href="/privacy-policy">{c.footer.privacy}</a>
+        <a href="/terminos">{c.footer.terms}</a>
+        <a href="/cookie-policy">{c.footer.cookies}</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script is:inline>
+  document.querySelectorAll('[data-set-lang]').forEach((el) => {
+    el.addEventListener('click', () => {
+      try {
+        localStorage.setItem('app_lang', el.getAttribute('data-set-lang'));
+      } catch (e) {}
+    });
+  });
+</script>

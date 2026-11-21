@@ -402,27 +402,11 @@ import Layout from "../../layouts/LayoutEditors.astro";
                   </button>
                 </div>
 
-                <!--Aquí está la IA de Inled. A lo mejor debería hacer más grande el icono pero se me descoloca todo-->
-                <div class="toolbar-group">
-                  <button
-                    class="format-btn"
-                    id="toggle-chat"
-                    title="Hablar con la inteligencia artificial de Inled."
-                  >
-                    <img
-                      src="https://hosted.inled.es/inledai.svg"
-                      alt="logo Inled AI"
-                      class="ailogo"
-                    />
-                    <span>Chat IA</span>
-                  </button>
-                </div>
-
                 <div class="toolbar-group">
                   <a href="/inlinked/" style="text-decoration: none;">
                     <button
                       class="format-btn"
-                      id="toggle-chat"
+                      id="update-editor"
                       title="Nuevo editor."
                     >
                       <span>Actualizar el editor</span>
@@ -435,48 +419,6 @@ import Layout from "../../layouts/LayoutEditors.astro";
         </div>
       </section>
     </main>
-
-    <!-- Panel del chat (ahora fuera del editor-container, como barra lateral) -->
-    <div class="chat-panel" id="chat-panel">
-      <div class="chat-header">
-        <h3>
-          <img
-            src="https://hosted.inled.es/inledai.svg"
-            alt="logo Inled AI"
-            class="ailogo"
-          /> Inled AI
-        </h3>
-        <button class="chat-close" id="chat-close" style="color: black;">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-      <div class="chat-status" id="chat-status">
-        <div class="loading-spinner"></div>
-        <span>Cargando modelo de IA...</span>
-      </div>
-      <div class="chat-messages" id="chat-messages"></div>
-      <div class="chat-input-container">
-        <textarea
-          id="chat-input"
-          placeholder="Habla aquí con la IA..."
-          rows="3"
-          disabled></textarea>
-        <div class="chat-actions">
-          <button id="send-message" class="chat-btn primary" disabled>
-            <i class="fas fa-paper-plane"></i>
-            Enviar
-          </button>
-          <button id="insert-response" class="chat-btn secondary" disabled>
-            <i class="fas fa-plus"></i>
-            Insertar
-          </button>
-          <button id="copy-response" class="chat-btn secondary" disabled>
-            <i class="fas fa-copy"></i>
-            Copiar
-          </button>
-        </div>
-      </div>
-    </div>
 
     <!-- FAQ Section -->
     <div class="container px-5">
@@ -519,7 +461,5 @@ import Layout from "../../layouts/LayoutEditors.astro";
         </section>
       </div>
     </div>
-    ¡¡
   </html>
-  <script is:inline src="/inlinked/js/_ai.js" type="module"></script>
 </Layout>

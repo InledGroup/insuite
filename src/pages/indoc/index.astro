@@ -11,11 +11,11 @@ import Layout from "../../layouts/LayoutEditors.astro";
                 name="viewport"
                 content="width=device-width, initial-scale=1.0"
             />
-            <title>InDoc - Edita texto con IA gratuitamente</title>
+            <title>InDoc - Edita texto gratuitamente</title>
 
             <meta
                 name="description"
-                content="Editor de texto con IA integrada gratuito, privado y open-source"
+                content="Editor de texto gratuito, privado y open-source"
             />
 
             <!-- Quill CSS -->
@@ -111,24 +111,6 @@ import Layout from "../../layouts/LayoutEditors.astro";
                             </button>
                         </div>
 
-                        <div class="toolbar-separator"></div>
-
-                        <!--Aquí está la IA de Inled. A lo mejor debería hacer más grande el icono pero se me descoloca todo-->
-                        <div class="toolbar-section">
-                            <button
-                                class="toolbar-btn"
-                                id="toggle-chat"
-                                title="Hablar con la inteligencia artificial de Inled."
-                                data-i18n-tooltip="ai.chat"
-                            >
-                                <img
-                                    src="inledai.svg"
-                                    alt="logo Inled AI"
-                                    class="ailogo"
-                                />
-                                <span data-i18n="ai.chat">Chat IA</span>
-                            </button>
-                        </div>
                     </div>
                 </header>
 
@@ -142,64 +124,6 @@ import Layout from "../../layouts/LayoutEditors.astro";
                         </div>
                     </div>
 
-                    <!-- Panel del chat (inicialmente oculto) -->
-                    <div class="chat-panel" id="chat-panel">
-                        <div class="chat-header">
-                            <h3>
-                                <img
-                                    src="inledai.svg"
-                                    alt="logo Inled AI"
-                                    class="ailogo"
-                                /> <span data-i18n="ai.title">Inled AI</span>
-                            </h3>
-                            <button class="chat-close" id="chat-close">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-
-                        <div class="chat-status" id="chat-status">
-                            <div class="loading-spinner"></div>
-                            <span data-i18n="ai.loading">Cargando modelo de IA...</span>
-                        </div>
-
-                        <div class="chat-messages" id="chat-messages"></div>
-
-                        <div class="chat-input-container">
-                            <textarea
-                                id="chat-input"
-                                placeholder="Habla aquí con la IA..."
-                                rows="3"
-                                disabled
-                                data-i18n="ai.placeholder"
-                                ></textarea>
-                            <div class="chat-actions">
-                                <button
-                                    id="send-message"
-                                    class="chat-btn primary"
-                                    disabled
-                                >
-                                    <i class="fas fa-paper-plane"></i>
-                                    <span data-i18n="ai.send">Enviar</span>
-                                </button>
-                                <button
-                                    id="insert-response"
-                                    class="chat-btn secondary"
-                                    disabled
-                                >
-                                    <i class="fas fa-plus"></i>
-                                    <span data-i18n="ai.insert">Insertar</span>
-                                </button>
-                                <button
-                                    id="copy-response"
-                                    class="chat-btn secondary"
-                                    disabled
-                                >
-                                    <i class="fas fa-copy"></i>
-                                    <span data-i18n="ai.copy">Copiar</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
                 </main>
             </div>
 
@@ -219,11 +143,6 @@ import Layout from "../../layouts/LayoutEditors.astro";
             ></script>
             <script
                 src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
-            ></script>
-
-            <!-- Marked para renderizar el markdown que nos genera nuestra IA -->
-            <script
-                src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"
             ></script>
 
             <!--El módulo que le da la funcionalidad a todo esto-->

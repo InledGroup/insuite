@@ -1,9 +1,6 @@
-class QuillScribeAI {
+class InDocApp {
     constructor() {
         this.quill = null;
-        this.chatEngine = null;
-        this.lastResponse = '';
-        this.isLoading = false;
         
         this.init();
     }
@@ -17,7 +14,6 @@ class QuillScribeAI {
     async init() {
         this.initializeQuill();
         this.setupEventListeners();
-        await this.initializeWebLLM();
         
         // Listener for language change to update placeholder if needed
         window.addEventListener('languageChanged', () => {
@@ -48,7 +44,7 @@ class QuillScribeAI {
                     container: toolbarOptions
                 }
             },
-            placeholder: this.t('indoc.placeholder', 'Comienza a escribir aquí con la ayuda de la IA. :)')
+            placeholder: this.t('indoc.placeholder', 'Comienza a escribir aquí. :)')
         });
 
         // Mover la toolbar al contenedor personalizado
@@ -63,23 +59,6 @@ class QuillScribeAI {
         document.getElementById('save-doc').addEventListener('click', () => this.saveToLocalStorage());
         document.getElementById('export-pdf').addEventListener('click', () => this.exportToPDF());
         document.getElementById('export-txt').addEventListener('click', () => this.exportToTXT());
-        document.getElementById('toggle-chat').addEventListener('click', () => this.toggleChat());
-
-        // Controles del chat
-        document.getElementById('chat-close').addEventListener('click', () => this.closeChat());
-        document.getElementById('send-message').addEventListener('click', () => this.sendMessage());
-        document.getElementById('insert-response').addEventListener('click', () => this.insertResponse());
-        document.getElementById('copy-response').addEventListener('click', () => this.copyResponse());
-
-        // Input del chat
-        const chatInput = document.getElementById('chat-input');
-        chatInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                this.sendMessage();
-            }
-        });
-
         // Atajos de teclado
         document.addEventListener('keydown', (e) => {
             if (e.ctrlKey) {
@@ -105,56 +84,6 @@ class QuillScribeAI {
                 }
             }
         });
-    }
-
-    async initializeWebLLM() {
-        try {
-            console.log('Inicializando WebLLM...');
-            
-            // Importar WebLLM dinámicamente
-            const { CreateMLCEngine } = await import('https://esm.run/@mlc-ai/web-llm');
-            
-            // Configurar el modelo (usando un modelo más pequeño para mejor rendimiento)
-            const selectedModel = "Llama-3.2-1B-Instruct-q4f32_1-MLC";
-            
-            this.updateChatStatus(this.t('indoc.ai_downloading', 'Descargando modelo de IA...'), true);
-            
-            // Crear el engine con callbacks de progreso
-            this.chatEngine = await CreateMLCEngine(selectedModel, {
-                initProgressCallback: (progress) => {
-                    const percentage = Math.round(progress.progress * 100);
-                    this.updateChatStatus(`${this.t('indoc.ai_downloading', 'Descargando modelo de IA')}: ${percentage}%`, true);
-                }
-            });
-
-            console.log('WebLLM inicializado correctamente');
-            this.updateChatStatus(this.t('indoc.ai_ready', '¡IA lista para usar!'), false);
-            this.enableChatControls();
-            
-        } catch (error) {
-            console.error('Error inicializando WebLLM:', error);
-            this.updateChatStatus(this.t('indoc.ai_error_load', 'Error al cargar la IA. Inténtalo más tarde.'), false);
-        }
-    }
-
-    updateChatStatus(message, showSpinner) {
-        const statusEl = document.getElementById('chat-status');
-        const spinner = statusEl.querySelector('.loading-spinner');
-        const text = statusEl.querySelector('span');
-        
-        text.textContent = message;
-        spinner.style.display = showSpinner ? 'block' : 'none';
-        
-        if (!showSpinner && (message.includes('lista') || message.includes('ready'))) {
-            setTimeout(() => {
-                statusEl.classList.add('hidden');
-            }, 2000);
-        }
-    }
-
-    enableChatControls() {
-        document.getElementById('chat-input').disabled = false;
-        document.getElementById('send-message').disabled = false;
     }
 
     newDocument() {
@@ -331,293 +260,10 @@ class QuillScribeAI {
         URL.revokeObjectURL(url);
     }
 
-    toggleChat() {
-        const chatPanel = document.getElementById('chat-panel');
-        chatPanel.classList.toggle('open');
-        
-        if (chatPanel.classList.contains('open')) {
-            document.getElementById('chat-input').focus();
-        }
-    }
 
-    closeChat() {
-        document.getElementById('chat-panel').classList.remove('open');
-    }
-
-    async sendMessage() {
-        if (!this.chatEngine || this.isLoading) return;
-        
-        const input = document.getElementById('chat-input');
-        const message = input.value.trim();
-        if (!message) return;
-
-        // Obtener el texto actual del editor
-        const editorText = this.quill.getText();
-
-        this.isLoading = true;
-        input.value = '';
-        input.disabled = true;
-        document.getElementById('send-message').disabled = true;
-        
-        // Agregar mensaje del usuario
-        this.addMessage(message, 'user');
-        
-        // Mostrar indicador de "pensando"
-        const thinkingEl = this.addThinkingIndicator();
-        
-        try {
-            // Enviar mensaje a la IA con contexto del editor
-            const response = await this.chatEngine.chat.completions.create({
-                messages: [
-                    {
-                        role: "system",
-                        content: this.t('indoc.ai_system_prompt', "Eres un asistente...") + editorText
-                    },
-                    {
-                        role: "user",
-                        content: message
-                    }
-                ],
-                temperature: 0.7,
-                max_tokens: 512
-            });
-            
-            const aiResponse = response.choices[0].message.content;
-            this.lastResponse = aiResponse;
-            
-            // Remover indicador de "pensando" y agregar respuesta
-            thinkingEl.remove();
-            this.addMessage(aiResponse, 'assistant');
-            
-            // Habilitar botones de acción
-            document.getElementById('insert-response').disabled = false;
-            document.getElementById('copy-response').disabled = false;
-            
-        } catch (error) {
-            console.error('Error en chat:', error);
-            thinkingEl.remove();
-            this.addMessage(this.t('ai.error', 'Lo siento, hubo un error al procesar tu mensaje. Inténtalo de nuevo.'), 'assistant');
-        }
-        
-        this.isLoading = false;
-        input.disabled = false;
-        document.getElementById('send-message').disabled = false;
-        input.focus();
-    }
-
-    // Añade esta función utilitaria para convertir Markdown a HTML usando marked.js si está disponible
-    markdownToHtml(markdown) {
-        if (typeof marked !== 'undefined') {
-            return marked.parse(markdown);
-        }
-        // Fallback simple para negrita y cursiva si marked no está disponible
-        let html = markdown
-            .replace(/(\*\*|__)(.*?)\1/g, '<strong>$2</strong>')
-            .replace(/(\*|_)(.*?)\1/g, '<em>$2</em>')
-            .replace(/\n/g, '<br>');
-        return html;
-    }
-
-    addMessage(content, sender) {
-        const messagesContainer = document.getElementById('chat-messages');
-        const messageEl = document.createElement('div');
-        messageEl.className = `message ${sender}`;
-        if (sender === 'assistant') {
-            messageEl.innerHTML = this.markdownToHtml(content);
-        } else {
-            messageEl.textContent = content;
-        }
-        messagesContainer.appendChild(messageEl);
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        return messageEl;
-    }
-
-    addThinkingIndicator() {
-        const messagesContainer = document.getElementById('chat-messages');
-        const thinkingEl = document.createElement('div');
-        thinkingEl.className = 'chat-thinking';
-        thinkingEl.innerHTML = `
-            <span>${this.t('ai.thinking', 'Pensando')}</span>
-            <div class="thinking-dots">
-                <div class="thinking-dot"></div>
-                <div class="thinking-dot"></div>
-                <div class="thinking-dot"></div>
-            </div>
-        `;
-        
-        messagesContainer.appendChild(thinkingEl);
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        
-        return thinkingEl;
-    }
-
-    insertResponse() {
-        if (this.lastResponse) {
-            const formattedContent = this.parseMarkdownToQuill(this.lastResponse);
-            const selection = this.quill.getSelection();
-            const index = selection ? selection.index : this.quill.getLength();
-            
-            // Insertar contenido formateado
-            this.quill.insertText(index, '\n'); // Salto de línea antes
-            const newIndex = index + 1;
-            
-            // Procesar y insertar el contenido formateado
-            this.insertFormattedContent(formattedContent, newIndex);
-        }
-    }
-
-    parseMarkdownToQuill(markdown) {
-        // Convertir Markdown básico a formato Quill
-        const lines = markdown.split('\n');
-        const content = [];
-        
-        lines.forEach(line => {
-            if (line.trim() === '') {
-                content.push({ type: 'text', content: '\n' });
-                return;
-            }
-            
-            // Headers
-            if (line.startsWith('### ')) {
-                content.push({ type: 'header', level: 3, content: line.substring(4) });
-            } else if (line.startsWith('## ')) {
-                content.push({ type: 'header', level: 2, content: line.substring(3) });
-            } else if (line.startsWith('# ')) {
-                content.push({ type: 'header', level: 1, content: line.substring(2) });
-            }
-            // Listas
-            else if (line.match(/^\d+\.\s/)) {
-                content.push({ type: 'list', ordered: true, content: line.replace(/^\d+\.\s/, '') });
-            } else if (line.startsWith('- ') || line.startsWith('* ')) {
-                content.push({ type: 'list', ordered: false, content: line.substring(2) });
-            }
-            // Texto normal con formato inline
-            else {
-                content.push({ type: 'paragraph', content: line });
-            }
-        });
-        
-        return content;
-    }
-
-    insertFormattedContent(content, startIndex) {
-        let currentIndex = startIndex;
-        
-        content.forEach(item => {
-            switch (item.type) {
-                case 'header':
-                    this.quill.insertText(currentIndex, item.content + '\n');
-                    this.quill.formatText(currentIndex, item.content.length, 'header', item.level);
-                    currentIndex += item.content.length + 1;
-                    break;
-                    
-                case 'list':
-                    this.quill.insertText(currentIndex, item.content + '\n');
-                    this.quill.formatLine(currentIndex, 1, 'list', item.ordered ? 'ordered' : 'bullet');
-                    currentIndex += item.content.length + 1;
-                    break;
-                    
-                case 'paragraph':
-                    const formattedText = this.processInlineFormatting(item.content);
-                    this.insertTextWithFormatting(formattedText, currentIndex);
-                    currentIndex += item.content.length + 1;
-                    this.quill.insertText(currentIndex - 1, '\n');
-                    break;
-                    
-                case 'text':
-                    this.quill.insertText(currentIndex, item.content);
-                    currentIndex += item.content.length;
-                    break;
-            }
-        });
-        
-        this.quill.setSelection(currentIndex);
-    }
-
-    processInlineFormatting(text) {
-        const segments = [];
-        let currentPos = 0;
-        
-        // Procesar negritas **texto**
-        text.replace(/\*\*(.*?)\*\*/g, (match, content, offset) => {
-            if (offset > currentPos) {
-                segments.push({ text: text.substring(currentPos, offset), bold: false });
-            }
-            segments.push({ text: content, bold: true });
-            currentPos = offset + match.length;
-            return match;
-        });
-        
-        // Agregar texto restante
-        if (currentPos < text.length) {
-            const remaining = text.substring(currentPos);
-            // Procesar cursivas *texto*
-            const italicSegments = [];
-            let italicPos = 0;
-            
-            remaining.replace(/\*(.*?)\*/g, (match, content, offset) => {
-                if (offset > italicPos) {
-                    italicSegments.push({ text: remaining.substring(italicPos, offset), italic: false });
-                }
-                italicSegments.push({ text: content, italic: true });
-                italicPos = offset + match.length;
-                return match;
-            });
-            
-            if (italicPos < remaining.length) {
-                italicSegments.push({ text: remaining.substring(italicPos), italic: false });
-            }
-            
-            segments.push(...italicSegments);
-        }
-        
-        return segments.length > 0 ? segments : [{ text: text, bold: false, italic: false }];
-    }
-
-    insertTextWithFormatting(segments, startIndex) {
-        let currentIndex = startIndex;
-        
-        segments.forEach(segment => {
-            this.quill.insertText(currentIndex, segment.text);
-            
-            if (segment.bold) {
-                this.quill.formatText(currentIndex, segment.text.length, 'bold', true);
-            }
-            if (segment.italic) {
-                this.quill.formatText(currentIndex, segment.text.length, 'italic', true);
-            }
-            
-            currentIndex += segment.text.length;
-        });
-    }
-
-    async copyResponse() {
-        if (this.lastResponse) {
-            try {
-                await navigator.clipboard.writeText(this.lastResponse);
-                
-                // Feedback visual
-                const btn = document.getElementById('copy-response');
-                const originalText = btn.innerHTML;
-                btn.innerHTML = '<i class="fas fa-check"></i> ' + this.t('ai.copied', 'Copiado');
-                btn.style.background = '#28a745';
-                btn.style.color = 'white';
-                
-                setTimeout(() => {
-                    btn.innerHTML = originalText;
-                    btn.style.background = '';
-                    btn.style.color = '';
-                }, 2000);
-                
-            } catch (error) {
-                console.error('Error copiando:', error);
-                alert(this.t('indoc.copy_error', 'Error al copiar el texto'));
-            }
-        }
-    }
 }
 
 // Inicializar la aplicación cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
-    window.quillApp = new QuillScribeAI();
+    window.quillApp = new InDocApp();
 });

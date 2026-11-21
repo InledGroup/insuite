@@ -1,0 +1,106 @@
+/*
+ * The Insuite Office look, shared by the standalone editors.
+ *
+ * The editors grew up with their own skins (dark X, glassmorphism, gradients).
+ * This file gives them one chrome and one token set, so opening inDOC, inMD or
+ * MDPDF feels like staying inside Insuite Office. It only applies under
+ * `body.office-theme`, which LayoutEditors sets, so the legacy `/apps` page
+ * keeps its own dark surface.
+ */
+
+:root {
+  --office-paper: #faf9f8;
+  --office-surface: #ffffff;
+  --office-surface-2: #f3f2f1;
+  --office-line: #e1dfdd;
+  --office-line-strong: #d2d0ce;
+  --office-ink: #201f1e;
+  --office-ink-2: #484644;
+  --office-ink-3: #605e5c;
+  --office-ink-4: #8a8886;
+  --office-accent: #0f6cbd;
+  --office-accent-hover: #115ea3;
+  --office-accent-soft: #ebf3fa;
+  --office-radius: 4px;
+  --office-shadow: 0 1px 2px rgb(0 0 0 / 8%);
+  --office-font: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+}
+
+body.office-theme {
+  background: var(--office-paper);
+  color: var(--office-ink);
+  font-family: var(--office-font);
+  -webkit-font-smoothing: antialiased;
+}
+
+body.office-theme ::selection {
+  background: var(--office-accent-soft);
+  color: var(--office-ink);
+}
+
+/* ---- the shared suite rail ---- */
+
+.office-theme .sidebar {
+  background: var(--office-surface);
+  border-right: 1px solid var(--office-line);
+}
+
+.office-theme .sidebar-item {
+  color: var(--office-ink-2);
+  border-radius: var(--office-radius);
+}
+
+.office-theme .sidebar-item:hover {
+  background: var(--office-surface-2);
+}
+
+.office-theme .sidebar-item.active {
+  background: var(--office-accent-soft);
+  border-radius: var(--office-radius);
+  color: var(--office-accent);
+}
+
+.office-theme .lang-switch {
+  background: var(--office-surface);
+  border: 1px solid var(--office-line-strong);
+  border-radius: var(--office-radius);
+  color: var(--office-ink-3);
+}
+
+.office-theme .lang-switch:hover {
+  background: var(--office-surface-2);
+  border-color: var(--office-line-strong);
+  color: var(--office-ink);
+}
+
+@media (max-width: 768px) {
+  .office-theme .sidebar {
+    border-top: 1px solid var(--office-line);
+    border-right: 0;
+  }
+}
+
+/* ---- shared atoms the editors reuse ---- */
+
+.office-theme a {
+  color: var(--office-accent);
+}
+
+.office-theme ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.office-theme ::-webkit-scrollbar-track {
+  background: var(--office-surface-2);
+}
+
+.office-theme ::-webkit-scrollbar-thumb {
+  background: var(--office-line-strong);
+  border: 2px solid var(--office-surface-2);
+  border-radius: 6px;
+}
+
+.office-theme ::-webkit-scrollbar-thumb:hover {
+  background: var(--office-ink-4);
+}

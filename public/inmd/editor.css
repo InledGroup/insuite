@@ -1,65 +1,66 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
 body {
-    font-family: 'Ubuntu', sans-serif;
-    background: linear-gradient(135deg, #e0e5ec 0%, #f0f5fa 100%);
+    font-family: var(--office-font, 'Segoe UI', sans-serif);
+    background: var(--office-paper, #faf9f8);
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh; /* Asegura que el body tenga al menos el alto de la ventana */
+    min-height: 100vh;
     margin: 0;
     padding: 20px;
     box-sizing: border-box;
-    overflow-y: auto; /* Permite scroll en el body si el contenido es demasiado alto en pantallas pequeñas */
+    overflow-y: auto;
 }
 
 .editor-container {
-    background: rgba(255, 255, 255, 0.2); /* Fondo de cristal esmerilado */
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    padding: 30px;
-    width: 90%;
-    max-width: 1200px;
+    background: var(--office-surface, #fff);
+    border-radius: 8px;
+    border: 1px solid var(--office-line, #e1dfdd);
+    box-shadow: var(--office-shadow, 0 1px 2px rgba(0, 0, 0, 0.08));
+    padding: 20px;
+    width: 100%;
+    max-width: 1180px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    height: 90vh; /* El contenedor principal ocupa el 90% del alto de la ventana */
-    min-height: 600px; /* Altura mínima para que no se vea demasiado pequeño */
+    gap: 16px;
+    height: calc(100vh - 40px);
+    min-height: 600px;
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 h1 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 25px;
+    text-align: left;
+    color: var(--office-ink, #201f1e);
+    margin: 0;
+    font-size: 18px;
     font-weight: 600;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-    flex-shrink: 0; /* Evita que el título se encoja */
+    text-shadow: none;
+    flex-shrink: 0;
 }
 
 /* Toolbar Styling */
 .toolbar {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    padding: 15px;
-    border-radius: 15px;
-    background: rgba(255, 255, 255, 0.3);
-    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1), inset -3px -3px 7px rgba(255, 255, 255, 0.7);
+    align-items: center;
+    gap: 4px;
+    padding: 8px 10px;
+    border-radius: var(--office-radius, 4px);
+    background: var(--office-surface, #fff);
+    border: 1px solid var(--office-line, #e1dfdd);
+    box-shadow: none;
     margin-bottom: 0;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    flex-shrink: 0; /* Evita que la barra de herramientas se encoja */
+    flex-shrink: 0;
 }
 
 .toolbar-group {
     display: flex;
-    gap: 8px;
-    border-right: 1px solid rgba(255, 255, 255, 0.5);
-    padding-right: 10px;
+    align-items: center;
+    gap: 2px;
+    border-right: 1px solid var(--office-line, #e1dfdd);
+    padding-right: 8px;
 }
 
 .toolbar-group:last-child {
@@ -68,125 +69,141 @@ h1 {
 }
 
 .toolbar button {
-    background: rgba(255, 255, 255, 0.4);
+    background: transparent;
     border: none;
-    padding: 10px 15px;
-    border-radius: 10px;
+    padding: 6px 9px;
+    border-radius: var(--office-radius, 4px);
     cursor: pointer;
-    font-size: 1rem;
-    color: #555;
-    transition: all 0.2s ease;
-    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1), -3px -3px 6px rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    color: var(--office-ink-2, #484644);
+    transition: background-color 120ms ease, color 120ms ease;
+    box-shadow: none;
 }
 
 .toolbar button:hover {
-    background: rgba(255, 255, 255, 0.6);
-    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1), inset -3px -3px 7px rgba(255, 255, 255, 0.7);
-    color: #333;
+    background: var(--office-surface-2, #f3f2f1);
+    box-shadow: none;
+    color: var(--office-ink, #201f1e);
 }
 
 .toolbar button:active {
-    box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.1), inset -1px -1px 2px rgba(255, 255, 255, 0.7);
-    transform: translateY(1px);
+    background: var(--office-accent-soft, #ebf3fa);
+    color: var(--office-accent, #0f6cbd);
+    box-shadow: none;
+    transform: none;
 }
 
 /* Editor Main Area */
 .editor-main {
     display: flex;
-    gap: 20px;
-    flex-grow: 1; /* Permite que ocupe el espacio restante */
-    min-height: 0; /* Importante para que flexbox maneje correctamente el espacio restante */
+    gap: 14px;
+    flex-grow: 1;
+    min-height: 0;
 }
 
 .editor-panel {
-    flex: 1; /* Cada panel ocupa la misma cantidad de espacio */
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    padding: 20px;
+    flex: 1;
+    background: var(--office-surface, #fff);
+    border-radius: var(--office-radius, 4px);
+    border: 1px solid var(--office-line, #e1dfdd);
+    box-shadow: none;
+    padding: 12px;
     display: flex;
-    flex-direction: column; /* Esto es clave: los hijos se apilan verticalmente */
-    overflow: hidden; /* Oculta cualquier desbordamiento si el contenido excede el panel */
-    flex-shrink: 0; /* Evita que los paneles se encojan */
-    min-height: 0; /* Permite que los elementos internos controlen su altura si son flex items */
+    flex-direction: column;
+    overflow: hidden;
+    flex-shrink: 0;
+    min-height: 0;
 }
 
 .editor-panel h3 {
-    color: #333;
+    color: var(--office-ink-3, #605e5c);
     margin-top: 0;
-    margin-bottom: 15px;
-    font-weight: 400;
-    flex-shrink: 0; /* Asegura que el título del panel no se encoja */
+    margin-bottom: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    flex-shrink: 0;
 }
 
 /* Explicitly target the actual editable/textarea elements for fixed height and scroll */
 #visual-editor,
 #markdown-output {
-    flex-grow: 1; /* Ocupa el espacio restante dentro de su panel padre */
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-radius: 10px;
-    padding: 15px;
-    font-size: 1rem;
-    line-height: 1.6;
+    flex-grow: 1;
+    border: 1px solid var(--office-line, #e1dfdd);
+    border-radius: var(--office-radius, 4px);
+    padding: 16px;
+    font-size: 14px;
+    line-height: 1.65;
     outline: none;
-    resize: none; /* Evita el redimensionamiento manual */
-    background: rgba(255, 255, 255, 0.15); /* Cristal más oscuro para áreas de entrada */
-    box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.1), inset -2px -2px 5px rgba(255, 255, 255, 0.7);
-    color: #333;
-    transition: all 0.3s ease;
-    overflow: auto; /* Habilita scroll vertical y horizontal si el contenido desborda */
-    min-height: 0; /* Importante: permite que flex-grow funcione y el elemento ocupe solo el espacio disponible */
-    white-space: pre-wrap; /* Permite que el texto se envuelva normalmente en el editor visual */
-    word-wrap: break-word; /* Rompe palabras largas para evitar desbordamiento horizontal */
+    resize: none;
+    background: var(--office-surface, #fff);
+    box-shadow: none;
+    color: var(--office-ink, #201f1e);
+    transition: border-color 120ms ease, box-shadow 120ms ease;
+    overflow: auto;
+    min-height: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }
 
 #visual-editor:focus,
 #markdown-output:focus {
-    border-color: rgba(255, 255, 255, 0.6);
-    box-shadow: inset 1px 1px 5px rgba(0, 0, 0, 0.15), inset -3px -3px 7px rgba(255, 255, 255, 0.8);
+    border-color: var(--office-accent, #0f6cbd);
+    box-shadow: 0 0 0 3px var(--office-accent-soft, #ebf3fa);
 }
 
 /* Markdown output specific */
 #markdown-output {
-    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; /* Monoespaciado para código */
-    white-space: pre; /* Mantiene el formato de espacio en blanco preformateado para la estructura markdown */
-    word-wrap: normal; /* Deshabilita el ajuste de palabras para que el scroll-x funcione correctamente en texto markdown */
+    background: var(--office-paper, #faf9f8);
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 13px;
+    white-space: pre;
+    word-wrap: normal;
 }
 
 /* Action Buttons */
 .actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 20px;
-    justify-content: center;
-    flex-shrink: 0; /* Evita que los botones de acción se encojan */
+    gap: 8px;
+    margin-top: 0;
+    justify-content: flex-start;
+    flex-shrink: 0;
 }
 
 .actions button {
-    background: rgba(0, 123, 255, 0.5); /* Efecto de cristal azul */
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 10px;
+    background: var(--office-surface, #fff);
+    color: var(--office-ink, #201f1e);
+    border: 1px solid var(--office-line-strong, #d2d0ce);
+    padding: 8px 14px;
+    border-radius: var(--office-radius, 4px);
     cursor: pointer;
-    font-size: 1rem;
-    font-weight: 500;
-    transition: all 0.2s ease;
-    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1), -3px -3px 6px rgba(255, 255, 255, 0.7);
+    font-size: 13px;
+    font-weight: 600;
+    transition: background-color 120ms ease, border-color 120ms ease;
+    box-shadow: none;
 }
 
 .actions button:hover {
-    background: rgba(0, 123, 255, 0.7);
-    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1), inset -3px -3px 7px rgba(255, 255, 255, 0.7);
+    background: var(--office-surface-2, #f3f2f1);
+    box-shadow: none;
 }
 
 .actions button:active {
-    box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.1), inset -1px -1px 2px rgba(255, 255, 255, 0.7);
-    transform: translateY(1px);
+    box-shadow: none;
+    transform: none;
+}
+
+.actions button:first-child {
+    background: var(--office-accent, #0f6cbd);
+    border-color: var(--office-accent, #0f6cbd);
+    color: #fff;
+}
+
+.actions button:first-child:hover {
+    background: var(--office-accent-hover, #115ea3);
+    border-color: var(--office-accent-hover, #115ea3);
 }
 
 /* Specific elements for visual editor */
@@ -194,7 +211,7 @@ h1 {
 #visual-editor h4, #visual-editor h5, #visual-editor h6 {
     margin-top: 1em;
     margin-bottom: 0.5em;
-    color: #333;
+    color: var(--office-ink, #201f1e);
 }
 
 #visual-editor p {
@@ -209,34 +226,36 @@ h1 {
 }
 
 #visual-editor blockquote {
-    border-left: 4px solid rgba(0, 0, 0, 0.2);
+    border-left: 3px solid var(--office-line-strong, #d2d0ce);
     padding-left: 15px;
-    color: #555;
+    color: var(--office-ink-3, #605e5c);
     font-style: italic;
     margin: 1em 0;
 }
 
 /* --- Improved Code Block Styles --- */
 #visual-editor code {
-    background-color: rgba(0, 0, 0, 0.1); /* Ligeramente más visible para código en línea */
-    padding: 3px 6px; /* Más padding */
-    border-radius: 5px;
-    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-    white-space: pre-wrap; /* Asegura que el código en línea se envuelva */
-    word-break: break-all; /* Rompe palabras largas si es necesario en código en línea */
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.05); /* Sombra inset muy sutil */
+    background-color: var(--office-surface-2, #f3f2f1);
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    white-space: pre-wrap;
+    word-break: break-all;
+    box-shadow: none;
+    color: var(--office-ink, #201f1e);
 }
 
 #visual-editor pre {
-    background-color: rgba(0, 0, 0, 0.15); /* Fondo más prominente para bloques de código */
-    padding: 20px; /* Mayor padding para más espacio */
-    border-radius: 10px; /* Radio ligeramente mayor */
-    overflow: auto; /* Permite scroll vertical y horizontal para el bloque pre en sí */
-    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+    background-color: var(--office-surface-2, #f3f2f1);
+    border: 1px solid var(--office-line, #e1dfdd);
+    padding: 16px;
+    border-radius: var(--office-radius, 4px);
+    overflow: auto;
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
     margin: 1em 0;
-    line-height: 1.5; /* Mayor altura de línea para mejor legibilidad */
-    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.15), inset -3px -3px 7px rgba(255, 255, 255, 0.8); /* Sombra inset más definida */
-    color: #eee; /* Color de texto más claro para mejor contraste en fondo de código más oscuro */
+    line-height: 1.5;
+    box-shadow: none;
+    color: var(--office-ink, #201f1e);
 }
 
 #visual-editor pre code {
@@ -256,25 +275,23 @@ h1 {
     width: 100%;
     border-collapse: collapse;
     margin: 1em 0;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    overflow: hidden; /* Para esquinas redondeadas */
+    background: var(--office-surface, #fff);
 }
 
 #visual-editor th, #visual-editor td {
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    border: 1px solid var(--office-line, #e1dfdd);
     padding: 10px;
     text-align: left;
-    color: #333;
+    color: var(--office-ink, #201f1e);
 }
 
 #visual-editor th {
-    background: rgba(255, 255, 255, 0.3);
+    background: var(--office-surface-2, #f3f2f1);
     font-weight: 600;
 }
 
 #visual-editor tr:nth-child(even) {
-    background: rgba(255, 255, 255, 0.05); /* Ligera franja para legibilidad */
+    background: var(--office-paper, #faf9f8);
 }
 
 /* Notification styling */
@@ -321,27 +338,26 @@ h1 {
     }
 }
 .header-content {
-    display: flex; /* Convierte este contenedor en un flex container */
-    align-items: center; /* Centra los elementos hijos verticalmente */
-    justify-content: center; /* Centra los elementos hijos horizontalmente */
-    gap: 15px; /* Espacio entre el logo y el h1 */
-    margin-bottom: 25px; /* Reemplaza el margin-bottom del h1 anterior si es necesario */
-    flex-shrink: 0; /* Evita que este contenedor se encoja */
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-bottom: 0;
+    flex-shrink: 0;
 }
 
 .header-content h1 {
-    margin: 0; /* Elimina el margen por defecto del h1 para que no interfiera con Flexbox */
-    text-align: left; /* Lo ponemos a la izquierda dentro de su espacio flex, aunque justify-content lo centra todo */
-    color: #333;
+    margin: 0;
+    text-align: left;
+    color: var(--office-ink, #201f1e);
     font-weight: 600;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-    /* flex-shrink: 0; ya lo tenemos en el .header-content, pero por si acaso si tuviera un texto muy largo */
+    text-shadow: none;
 }
 
 /* Estilos para la imagen del logo */
 .logo {
-    height: 40px; /* Ajusta la altura de tu logo según tus necesidades */
-    width: auto; /* Mantiene la proporción de la imagen */
-    object-fit: contain; /* Asegura que la imagen se ajuste dentro de las dimensiones sin cortarse */
-    flex-shrink: 0; /* Evita que la imagen se encoja si el texto es muy largo */
+    height: 28px;
+    width: auto;
+    object-fit: contain;
+    flex-shrink: 0;
 }

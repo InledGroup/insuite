@@ -11,7 +11,7 @@ const sidebarItems = [
 
 <div class="sidebar">
   {sidebarItems.map((item) => (
-    <a href={item.path} class={`sidebar-item ${currentPath === item.path ? 'active' : ''}`} style="text-decoration: none; color: white;" title={item.label} data-i18n-tooltip={item.label}>
+    <a href={item.path} class={`sidebar-item ${currentPath === item.path ? 'active' : ''}`} style="text-decoration: none;" title={item.label} data-i18n-tooltip={item.label}>
 <span class="material-symbols-rounded">
 {item.icon}
 </span>

@@ -20,6 +20,7 @@ const { title = "Insuite Editors", description = "Herramientas de edición", i18
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="stylesheet" href="/css/sidebar.css" />
         <link rel="stylesheet" href="/css/language-selector.css" />
+        <link rel="stylesheet" href="/css/office-editors.css" />
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -43,7 +44,7 @@ const { title = "Insuite Editors", description = "Herramientas de edición", i18
 
         
     </head>
-    <body data-i18n-title={i18nTitle}>
+    <body class="office-theme" data-i18n-title={i18nTitle}>
         <script is:inline>
             if (new URLSearchParams(window.location.search).get('client') === 'edgeai') {
                 document.documentElement.classList.add('edge-ai-mode');

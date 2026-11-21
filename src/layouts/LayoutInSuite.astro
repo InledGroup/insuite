@@ -1,0 +1,42 @@
+---
+interface Props {
+  lang: 'en' | 'es';
+  title: string;
+  description: string;
+  /** The page's own path, used for the canonical URL. */
+  path: string;
+}
+
+const { lang, title, description, path } = Astro.props;
+const origin = 'https://insuite.inled.es';
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={`${origin}${path}`} />
+    <link rel="alternate" hreflang="en" href={`${origin}/`} />
+    <link rel="alternate" hreflang="es" href={`${origin}/es/`} />
+    <link rel="alternate" hreflang="x-default" href={`${origin}/`} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="https://hosted.inled.es/cdn/insuite.svg" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="color-scheme" content="light" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={`${origin}${path}`} />
+    <meta property="og:image" content="https://hosted.inled.es/cdn/insuite.svg" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="preconnect" href="https://hosted.inled.es" crossorigin />
+    <link rel="stylesheet" href="/css/insuite.css" />
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

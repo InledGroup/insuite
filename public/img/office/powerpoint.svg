@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="PowerPoint">
+  <defs>
+    <linearGradient id="ppt-body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f28567" />
+      <stop offset="0.55" stop-color="#cd4b2b" />
+      <stop offset="1" stop-color="#8a2a12" />
+    </linearGradient>
+    <linearGradient id="ppt-sheen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.38" />
+      <stop offset="0.5" stop-color="#fff" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+  <rect x="4" y="2.5" width="24" height="27" rx="4" fill="url(#ppt-body)" />
+  <rect x="4" y="2.5" width="24" height="27" rx="4" fill="url(#ppt-sheen)" />
+  <rect x="4" y="2.5" width="24" height="27" rx="4" fill="none" stroke="#5c1a08" stroke-opacity="0.3" />
+  <text
+    x="16"
+    y="21.4"
+    text-anchor="middle"
+    font-family="Segoe UI, Arial, sans-serif"
+    font-size="14"
+    font-weight="700"
+    fill="#fff"
+  >
+    P
+  </text>
+</svg>

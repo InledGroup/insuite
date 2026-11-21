@@ -35,8 +35,6 @@ import Layout from "../../layouts/LayoutEditors.astro";
             <!--La barra lateral de InSuite-->
 
             <!--Los estilos para la IA-->
-            <link rel="stylesheet" href="/inmd/ai.css" />
-            <link rel="stylesheet" href="/inmd/aipowered.css" />
 
             <link rel="preconnect" href="https://fonts.googleapis.com" />
             <link
@@ -131,22 +129,6 @@ import Layout from "../../layouts/LayoutEditors.astro";
                         <button id="redo" title="Rehacer (Ctrl+Y)" data-i18n-tooltip="inmd.redo">↷</button>
                     </div>
 
-                    <!--Aquí está la IA de Inled. A lo mejor debería hacer más grande el icono pero se me descoloca todo-->
-                    <div class="toolbar-group">
-                        <button
-                            class="toolbar-btn"
-                            id="toggle-chat"
-                            title="Hablar con la inteligencia artificial de Inled."
-                            data-i18n-tooltip="ai.chat"
-                        >
-                            <img
-                                src="/inmd/inledai.svg"
-                                alt="logo Inled AI"
-                                class="ailogo"
-                            />
-                            <span data-i18n="ai.chat">Chat IA</span>
-                        </button>
-                    </div>
                 </div>
 
                 <!-- Área principal -->
@@ -179,75 +161,6 @@ import Layout from "../../layouts/LayoutEditors.astro";
                 </div>
             </div>
 
-            <!-- Panel del chat (ahora fuera del editor-container, como barra lateral) -->
-            <div class="chat-panel" id="chat-panel">
-                <div class="chat-header">
-                    <h3>
-                        <img
-                            src="/inmd/inledai.svg"
-                            alt="logo Inled AI"
-                            class="ailogo"
-                        /> <span data-i18n="ai.title">Inled AI</span>
-                    </h3>
-                    <button class="chat-close" id="chat-close">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div class="chat-status" id="chat-status">
-                    <div class="loading-spinner"></div>
-                    <span data-i18n="ai.loading">Cargando modelo de IA...</span>
-                </div>
-                <div class="chat-messages" id="chat-messages"></div>
-                <div class="chat-input-container">
-                    <textarea
-                        id="chat-input"
-                        placeholder="Habla aquí con la IA..."
-                        rows="3"
-                        disabled
-                        data-i18n="ai.placeholder"
-                        ></textarea>
-                    <div class="chat-actions">
-                        <button
-                            id="send-message"
-                            class="chat-btn primary"
-                            disabled
-                        >
-                            <i class="fas fa-paper-plane"></i>
-                            <span data-i18n="ai.send">Enviar</span>
-                        </button>
-                        <button
-                            id="insert-response"
-                            class="chat-btn secondary"
-                            disabled
-                        >
-                            <i class="fas fa-plus"></i>
-                            <span data-i18n="ai.insert">Insertar</span>
-                        </button>
-                        <button
-                            id="copy-response"
-                            class="chat-btn secondary"
-                            disabled
-                        >
-                            <i class="fas fa-copy"></i>
-                            <span data-i18n="ai.copy">Copiar</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="floating-card">
-                <img
-                    src="https://inled.es/upload/inledai.svg"
-                    alt="Inled AI Icon"
-                    class="floating-card-icon"
-                />
-                <a
-                    href="https://ai.inled.es"
-                    class="floating-card-text"
-                    style="text-decoration: none;"
-                    data-i18n="ai.powered"
-                    >Funciona gracias a Inled AI</a
-                >
-            </div>
         </body>
 
         <!--Scripts de funcionalidad-->
@@ -255,12 +168,5 @@ import Layout from "../../layouts/LayoutEditors.astro";
         <!--El editor-->
         <script is:inline src="/inmd/_editor.js"></script>
 
-        <!--La IA-->
-        <script is:inline src="/inmd/_ai.js"></script>
-
-        <!-- Marked para renderizar el markdown que nos genera nuestra IA -->
-        <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"
-        ></script>
     </html></Layout
 >

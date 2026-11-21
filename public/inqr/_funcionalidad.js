@@ -197,42 +197,26 @@
         `;
 
         try {
-          let codeUrl = '';
-          
-          if (isBarcode) {
-            // Generate barcode using barcode API
-            const encodedText = encodeURIComponent(data);
-            const type = barcodeType.value;
-            codeUrl = `https://barcode.tec-it.com/barcode.ashx?data=${encodedText}&code=${type.toUpperCase()}&translate-esc=true&unit=Fit&dpi=96&imagetype=Gif&rotation=0&color=%23000000&bgcolor=%23ffffff&qunit=Mm&quiet=0`;
-          } else {
-            // Generate QR code
-            const encodedText = encodeURIComponent(data);
-            codeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodedText}&format=png&ecc=M`;
-          }
-          
-          // Test if the image loads
-          const img = new Image();
-          img.onload = function() {
-            currentCodeUrl = codeUrl;
-            codeImage.src = codeUrl;
-            encodedText.textContent = data;
-            
-            placeholder.classList.add('hidden');
-            codeResult.classList.remove('hidden');
-            
-            downloadText.textContent = isBarcode ? t('inqr.download_barcode', 'Descargar Código de Barras') : t('inqr.download_qr', 'Descargar Código QR');
-            
-            showToast(isBarcode ? t('inqr.toast_success_barcode', '¡Código de barras generado correctamente!') : t('inqr.toast_success_qr', '¡Código QR generado correctamente!'));
-          };
-          
-          img.onerror = function() {
-            throw new Error('Failed to load code');
-          };
-          
-          img.src = codeUrl;
-          
+          // Everything is drawn here, on a canvas, with libraries served from
+          // this site: the text, the WiFi password and the code never travel
+          // to a third-party API.
+          const codeUrl = isBarcode
+            ? renderBarcode(data)
+            : renderQrCode(data);
+
+          currentCodeUrl = codeUrl;
+          codeImage.src = codeUrl;
+          encodedText.textContent = data;
+
+          placeholder.classList.add('hidden');
+          codeResult.classList.remove('hidden');
+
+          downloadText.textContent = isBarcode ? t('inqr.download_barcode', 'Descargar Código de Barras') : t('inqr.download_qr', 'Descargar Código QR');
+
+          showToast(isBarcode ? t('inqr.toast_success_barcode', '¡Código de barras generado correctamente!') : t('inqr.toast_success_qr', '¡Código QR generado correctamente!'));
         } catch (error) {
-          showToast(t('inqr.toast_error_download', 'Error al descargar...'), 'error');
+          console.error('No se pudo generar el código', error);
+          showToast(t('inqr.toast_error_generate', 'No se pudo generar el código. Inténtalo de nuevo.'), 'error');
         } finally {
           // Reset button state
           generateBtn.disabled = false;
@@ -242,24 +226,65 @@
         }
       }
 
-      // Download code
-      async function downloadCode() {
+      // Draw a QR code on a canvas and return it as a PNG data URL.
+      function renderQrCode(data, size = 300) {
+        const qr = qrcode(0, 'M');
+        qr.addData(data);
+        qr.make();
+
+        const modules = qr.getModuleCount();
+        const margin = 4;
+        const scale = Math.max(1, Math.floor(size / (modules + margin * 2)));
+        const pixels = (modules + margin * 2) * scale;
+
+        const canvas = document.createElement('canvas');
+        canvas.width = pixels;
+        canvas.height = pixels;
+
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, pixels, pixels);
+        ctx.fillStyle = '#000000';
+
+        for (let row = 0; row < modules; row++) {
+          for (let col = 0; col < modules; col++) {
+            if (qr.isDark(row, col)) {
+              ctx.fillRect((col + margin) * scale, (row + margin) * scale, scale, scale);
+            }
+          }
+        }
+
+        return canvas.toDataURL('image/png');
+      }
+
+      // CODE 128, drawn by JsBarcode on a canvas, also as a PNG data URL.
+      function renderBarcode(data) {
+        const canvas = document.createElement('canvas');
+        JsBarcode(canvas, data, {
+          format: 'CODE128',
+          width: 2,
+          height: 80,
+          displayValue: true,
+          margin: 10,
+          background: '#ffffff',
+          lineColor: '#000000'
+        });
+        return canvas.toDataURL('image/png');
+      }
+
+      // Download code: the data URL is already local, no fetch needed.
+      function downloadCode() {
         if (!currentCodeUrl) return;
         
         try {
-          const response = await fetch(currentCodeUrl);
-          const blob = await response.blob();
-          const url = window.URL.createObjectURL(blob);
-          
           const link = document.createElement('a');
-          link.href = url;
+          link.href = currentCodeUrl;
           const fileType = currentType === 'barcode' ? 'barcode' : 'qr-code';
           link.download = `${fileType}-${Date.now()}.png`;
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
           
-          window.URL.revokeObjectURL(url);
           showToast(t('inqr.toast_success_download', 'El código se ha descargado correctamente'));
         } catch (error) {
           showToast(t('inqr.toast_error_download', 'Vaya, ha fallado la descarga...'), 'error');
